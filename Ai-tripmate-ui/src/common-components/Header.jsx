@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
-import logo2 from "../assets/logo.jpg";
+import logo from "../assets/logo.jpg";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -48,7 +48,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         {/* Logo & Website Name */}
         <Link to="/" className="flex items-center space-x-2">
-          <img src={logo2} alt="Logo" className="w-12 h-12 rounded-lg" />
+          <img src={logo} alt="Logo" className="w-12 h-12 rounded-lg" />
           <span className="text-xl font-bold text-gray-800">AI Tripmate</span>
         </Link>
 

@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import hellojava from "../assets/hellojava.png"; // Import your images
-// import travel from  "../assets/hellojava.png"; // Add additional images
-// import adventure from  "../assets/hellojava.png"; // Add additional images
+import logo from "../assets/logo.jpg"; // Import your images
 
 const services = [
-  { title: "Hotel Service", images: [hellojava, hellojava, hellojava] },
-  { title: "Restaurant Service", images: [hellojava, hellojava, hellojava] },
-  { title: "Trip Planning", images: [hellojava, hellojava, hellojava] },
-  { title: "Travel Services", images: [hellojava, hellojava, hellojava] },
-  { title: "Full Trip Packages", images: [hellojava, hellojava, hellojava] }
+  { title: "Hotel Service", images: [logo, logo, logo] },
+  { title: "Restaurant Service", images: [logo, logo, logo] },
+  { title: "Trip Planning", images: [logo, logo, logo] },
+  { title: "Travel Services", images: [logo, logo, logo] },
+  { title: "Full Trip Packages", images: [logo, logo, logo] }
 ];
 
 const Services = () => {

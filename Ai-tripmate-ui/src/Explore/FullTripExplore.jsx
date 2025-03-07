@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import logo  from "../assets/logo.jpg";
+import ServiceDetailCard from "../card-details/ServiceDetailCard";
 
 const FullTripExplore = () => {
     const [destination, setDestination] = useState("New Delhi");
@@ -77,6 +78,7 @@ const FullTripExplore = () => {
                     I'm looking for flights
                 </label>
             </div>
+            <ServiceDetailCard/>
         </div>
     );
 };
