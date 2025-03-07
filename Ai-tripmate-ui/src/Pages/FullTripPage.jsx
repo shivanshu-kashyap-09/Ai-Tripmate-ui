@@ -4,8 +4,6 @@ import HotelPage from './HotelPage'
 import RestaurantPage from './RestaurantPage'
 import TripPage from './TripPage'
 import TravelPage from './TravelPage'
-import Header from '../common-components/Header'
-import Footer from '../common-components/Footer'
 
 function FullTrip() {
   const location = useLocation();
