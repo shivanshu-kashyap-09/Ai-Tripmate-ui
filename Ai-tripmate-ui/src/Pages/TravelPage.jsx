@@ -3,7 +3,7 @@ import Header from '../common-components/Header';
 import TravelDetailCard from '../card-details/TravelDetailCard';
 import { useLocation } from "react-router-dom";
 import Footer from '../common-components/Footer';
-import hellojava from "../assets/hellojava.png";
+import travel from "../assets/travel.jpg";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -19,11 +19,13 @@ function TravelPage() {
     const [trainTravelDuration, setTrainTravelDuration] = useState([]);
     const [trainTicket, setTrainTicket] = useState([]);
 
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     // Fetch Train Names
     useEffect(() => {
         const fetchTrainName = async () => {
             try {
-                const response = await axios.post("http://tomcat.localhost:8080/travel/train/name", {
+                const response = await axios.post(`${baseUrl}/travel/train/name`, {
                     "fromDes": userLocation,
                     "toDes": destinationLocation,
                     "date": date
@@ -54,7 +56,7 @@ function TravelPage() {
             try {
                 let times = [];
                 for (const train of trainName) {
-                    const response = await axios.post(`http://tomcat.localhost:8080/travel/train/time/${train}`, {
+                    const response = await axios.post(`${baseUrl}/travel/train/time/${train}`, {
                         "fromDes": userLocation,
                         "toDes": destinationLocation,
                         "date": date
@@ -82,7 +84,7 @@ function TravelPage() {
             try {
                 let durations = [];
                 for (const train of trainName) {
-                    const response = await axios.post(`http://tomcat.localhost:8080/travel/train/travel-time/${train}`, {
+                    const response = await axios.post(`${baseUrl}/travel/train/travel-time/${train}`, {
                         "fromDes": userLocation,
                         "toDes": destinationLocation,
                         "date": date
@@ -111,7 +113,7 @@ function TravelPage() {
                 let tickets = [];
                 for (const train of trainName) {
                     const response = await axios.post(
-                        `http://tomcat.localhost:8080/travel/train/ticket/${train}`,
+                        `${baseUrl}/travel/train/ticket/${train}`,
                         {
                             fromDes: userLocation,
                             toDes: destinationLocation,
@@ -147,7 +149,7 @@ function TravelPage() {
                     <TravelDetailCard 
                         key={index}
                         title={train || "Train1"}
-                        images={[hellojava, hellojava, hellojava]}
+                        images={[travel, travel, travel]}
                         description="Exciting travel experience"
                         duration={trainTravelDuration[index] || "Train travel duration not found"}
                         timing={trainTravelTime[index] || "Train travel time not found"}

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import logo2 from "../assets/logo.jpg";
 import { FaArrowRight } from "react-icons/fa";
 
 function LoginPage() {
@@ -13,6 +12,9 @@ function LoginPage() {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;  
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -25,7 +27,7 @@ function LoginPage() {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:8080/public/login", {
+      const response = await axios.post(`${baseUrl}/public/login`, {
         email,
         password,
       });
@@ -46,7 +48,7 @@ function LoginPage() {
   };
 
   return (
-    <GoogleOAuthProvider clientId="74437701368-28o5jnuvjvl87oviq7i1vm7b2eptooio.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={googleClientId}>
       <div className="min-h-screen flex items-center justify-center bg-gray-800 bg-opacity-50">
         <div className="bg-[#F7F5F0] rounded-2xl shadow-xl p-8 w-[400px] relative">
           <button className="absolute top-5 right-5 text-gray-500 text-2xl hover:text-gray-700">

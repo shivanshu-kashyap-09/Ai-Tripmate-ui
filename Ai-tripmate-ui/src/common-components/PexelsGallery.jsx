@@ -6,11 +6,13 @@ const PexelsGallery = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const searchImages = async () => {
         if (!query) return;
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8080/ai/image-search?query=${query}`);
+            const response = await axios.get(`${baseUrl}/ai/image-search?query=${query}`);
             setImages(response.data.photos);
         } catch (error) {
             console.error("Error fetching images:", error);

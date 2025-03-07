@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ServiceDetailCard from '../card-details/ServiceDetailCard'
-import hellojava from '../assets/hellojava.png'
+import restaurant from '../assets/restaurant.jpg'
 import Header from '../common-components/Header'
 import Footer from '../common-components/Footer'
 import axios from "axios"
@@ -19,10 +19,12 @@ function RestaurantService() {
   const [restaurantImage , setRestaurantImage] = useState([]);
   const [restaurantRating , setRestaurantRating] = useState([]);
 
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const response = await axios.post("http://tomcat.localhost:8080/resturent/name",
+        const response = await axios.post(`${baseUrl}/resturent/name`,
           { city: userLocation, budget: userBudget },
           {
             headers: { "Content-Type": "application/json" },
@@ -49,7 +51,7 @@ function RestaurantService() {
     const fetchDesc = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`http://tomcat.localhost:8080/resturent/description/${restaurantName[i]}" "${userLocation}`)
+          const response = await axios.get(`${baseUrl}/resturent/description/${restaurantName[i]}" "${userLocation}`)
 
           if (response.status === 200) {
             setRestaurantDesc((prev) => [...prev, response.data.body.body]);
@@ -68,7 +70,7 @@ function RestaurantService() {
     const fetchPrice = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`http://tomcat.localhost:8080/resturent/price/${restaurantName[i]}" "${userLocation}`)
+          const response = await axios.get(`${baseUrl}/resturent/price/${restaurantName[i]}" "${userLocation}`)
           if(response.status === 200){
             setRestaurantPriceRange((prev) => [...prev, response.data.body.body]);
           }else{
@@ -87,7 +89,7 @@ function RestaurantService() {
     const fetchRating = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`http://tomcat.localhost:8080/resturent/rating//${restaurantName[i]}" "${userLocation}`);
+          const response = await axios.get(`${baseUrl}/resturent/rating//${restaurantName[i]}" "${userLocation}`);
           if(response.status === 200){
             setRestaurantRating((prev) => [...prev, response.data.body.body]);
           }else{
@@ -107,11 +109,11 @@ function RestaurantService() {
       try {
         const imagesArray = [];
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`http://tomcat.localhost:8080/ai/image-search?query=${restaurantName[i]}" "${userLocation}`);
+          const response = await axios.get(`${baseUrl}/ai/image-search?query=${restaurantName[i]}" "${userLocation}`);
           if (response.status === 200 && response.data.length) {
             imagesArray.push(response.data); 
           } else {
-            imagesArray.push([hellojava, hellojava, hellojava]); 
+            imagesArray.push([restaurant, restaurant, restaurant]); 
           }
         }
         setRestaurantImage(imagesArray);
@@ -129,7 +131,7 @@ function RestaurantService() {
           <div className="mt-20 px-6">
           <h1 className="text-center text-3xl font-bold my-6">restaurant on {userLocation}</h1>
           <ServiceDetailCard title={restaurantName[0] || "Restaurant is not available"}
-          images={restaurantImage[0] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[0] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[0] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[0]+" "+userLocation}
@@ -137,7 +139,7 @@ function RestaurantService() {
           rating={restaurantRating[0] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[1] || "Restaurant is not available"}
-          images={restaurantImage[1] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[1] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[1] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[1]+" "+userLocation}
@@ -145,7 +147,7 @@ function RestaurantService() {
           rating={restaurantRating[1] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[2] || "Restaurant is not available"}
-          images={restaurantImage[2] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[2] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[2] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[2]+" "+userLocation}
@@ -153,7 +155,7 @@ function RestaurantService() {
           rating={restaurantRating[2] || "Rating is not available"}/>
         
         <ServiceDetailCard title={restaurantName[3] || "Restaurant is not available"}
-          images={restaurantImage[3] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[3] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[3] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[3]+" "+userLocation}
@@ -161,7 +163,7 @@ function RestaurantService() {
           rating={restaurantRating[3] || "Rating is not available"}/>
         
         <ServiceDetailCard title={restaurantName[4] || "Restaurant is not available"}
-          images={restaurantImage[4] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[4] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[4] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[4]+" "+userLocation}
@@ -169,7 +171,7 @@ function RestaurantService() {
           rating={restaurantRating[4] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[5] || "Restaurant is not available"}
-          images={restaurantImage[5] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[5] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[5] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[5]+" "+userLocation}
@@ -177,7 +179,7 @@ function RestaurantService() {
           rating={restaurantRating[5] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[6] || "Restaurant is not available"}
-          images={restaurantImage[6] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[6] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[6] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[6]+" "+userLocation}
@@ -185,7 +187,7 @@ function RestaurantService() {
           rating={restaurantRating[6] || "Rating is not available"}/>
 
 <ServiceDetailCard title={restaurantName[7] || "Restaurant is not available"}
-          images={restaurantImage[7] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[7] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[7] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[7]+" "+userLocation}
@@ -193,7 +195,7 @@ function RestaurantService() {
           rating={restaurantRating[7] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[8] || "Restaurant is not available"}
-          images={restaurantImage[8] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[8] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[8] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[8]+" "+userLocation}
@@ -201,7 +203,7 @@ function RestaurantService() {
           rating={restaurantRating[8] || "Rating is not available"}/>
 
           <ServiceDetailCard title={restaurantName[9] || "Restaurant is not available"}
-          images={restaurantImage[9] || [hellojava, hellojava, hellojava]} 
+          images={restaurantImage[9] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[9] || "description is not available"}
           location={userLocation}
           mapLocation={restaurantName[9]+" "+userLocation}

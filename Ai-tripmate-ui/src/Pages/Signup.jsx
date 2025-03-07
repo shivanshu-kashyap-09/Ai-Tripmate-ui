@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.jpg"; // Replace with your actual logo path
+import logo from "../assets/logo.jpg"; 
 
 const Signup = () => {
   const [formData, setFormData] = useState({

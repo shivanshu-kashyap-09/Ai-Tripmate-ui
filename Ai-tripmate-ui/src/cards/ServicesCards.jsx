@@ -1,9 +1,9 @@
 import React from 'react';
-import logo1 from '../assets/FullTrip.png';
-import logo2 from '../assets/Hotel.png';
-import logo3 from '../assets/Restaurant.jpg';
-import logo4 from '../assets/Travel.jpg';
-import logo5 from '../assets/Trip.png';
+import fulltrip from '../assets/FullTrip.png';
+import hotel from '../assets/Hotel.png';
+import restaurant from '../assets/Restaurant.jpg';
+import travel from '../assets/Travel.jpg';
+import trip from '../assets/Trip.png';
 import { Link } from 'react-router-dom';
 import fullTripExplore from "../Explore/FullTripExplore";
 
@@ -14,7 +14,7 @@ const ServiceCard = () => {
                 
                 {/* Card 1 - FULL TRIP SERVICE */}
                 <div className="flex flex-col md:flex-row-reverse items-center gap-8">
-                    <img src={logo1} alt="VIP Travel" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
+                    <img src={fulltrip} alt="VIP Travel" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
                     <div className="md:w-[50%]">
                         <h2 className="text-4xl font-semibold text-blue-800">FULL TRIP SERVICE</h2>
                         <br/>
@@ -35,7 +35,7 @@ const ServiceCard = () => {
 
                 {/* Card 2 - HOTEL SERVICE */}
                 <div className="flex flex-col md:flex-row items-center gap-8">
-                    <img src={logo2} alt="Hotel Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
+                    <img src={hotel} alt="Hotel Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
                     <div className="md:w-[50%]">
                         <h2 className="text-4xl font-semibold text-blue-800 pl-10">HOTEL SERVICE 🏨</h2>
                         <br/>
@@ -57,7 +57,7 @@ const ServiceCard = () => {
 
                 {/* Card 3 - RESTAURANT SERVICE */}
                 <div className="flex flex-col md:flex-row-reverse items-center gap-8">
-                    <img src={logo3} alt="Restaurant Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
+                    <img src={restaurant} alt="Restaurant Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
                     <div className="md:w-[50%]">
                         <h2 className="text-4xl font-semibold text-blue-800 pr-10">RESTAURANT SERVICE 🍽</h2>
                         <br/>
@@ -79,7 +79,7 @@ const ServiceCard = () => {
 
                 {/* Card 4 - TRIP SERVICE */}
                 <div className="flex flex-col md:flex-row items-center gap-8">
-                    <img src={logo4} alt="Trip Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
+                    <img src={trip} alt="Trip Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
                     <div className="md:w-[50%]">
                         <h2 className="text-4xl font-semibold text-blue-800 pl-10">TRIP SERVICE 🌍</h2>
                         <br/>
@@ -101,7 +101,7 @@ const ServiceCard = () => {
 
                 {/* Card 5 - TRAVEL SERVICE */}
                 <div className="flex flex-col md:flex-row-reverse items-center gap-8">
-                    <img src={logo5} alt="Travel Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
+                    <img src={travel} alt="Travel Service" className="w-full md:w-[45%] h-auto rounded-lg shadow-md" />
                     <div className="md:w-[50%]">
                         <h2 className="text-4xl font-semibold text-blue-800 pr-10">TRAVEL SERVICE 🚗</h2>
                         <br/>

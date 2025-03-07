@@ -3,9 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ServiceDetailCard from "../card-details/ServiceDetailCard";
 import { useLocation } from "react-router-dom";
-import logo2 from "../assets/logo.jpg";
-import Header from "../common-components/Header";
-import Footer from "../common-components/Footer";
+import trip from "../assets/trip.png";
+
 function TripPage() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -21,13 +20,15 @@ function TripPage() {
     const [visitPrice, setVisitPrice] = useState([]);
     const [locationRating, setLocationRating] = useState([]);
     const [locationImage, setLocationImage] = useState([]);
+
+    const baseUrl = import.meta.env.VITE_BASE_URL;
   
     /*** Fetch places Names ***/
 useEffect(() => {
   const fetchPlaces = async () => {
     try {
       const response = await axios.post(
-        "http://tomcat.localhost:8080/trip/location",
+        `${baseUrl}/trip/location`,
         { city: userLocation, budget: userBudget, days: userDays, person: userPeople },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -55,9 +56,9 @@ useEffect(() => {
   const fetch = async () => {
     try {
       for(let i = 0 ; i < locationName.length ; i++){
-        const responseDesc = await axios.get(`http://tomcat.localhost:8080/trip/description/${location} ${userLocation}`);
-        const responsePrice = await axios.get(`http://tomcat.localhost:8080/trip/explore/budget/${location} ${userLocation} under ${userBudget}`);
-        const responseRating = await axios.get(`http://tomcat.localhost:8080/trip/rating/${location} ${userLocation}`);
+        const responseDesc = await axios.get(`${baseUrl}/trip/description/${location} ${userLocation}`);
+        const responsePrice = await axios.get(`${baseUrl}/trip/explore/budget/${location} ${userLocation} under ${userBudget}`);
+        const responseRating = await axios.get(`${baseUrl}/trip/rating/${location} ${userLocation}`);
         if(responseDesc == 200){
           setLocationDesc((prev) => [...prev , responseDesc.data.body.body]);
         }
@@ -87,7 +88,7 @@ useEffect(() => {
             locationName.map(async (location) => {
               try {
                 const response = await axios.get(
-                  http://tomcat.localhost:8080/trip/description/${location} ${userLocation}
+                  ${baseUrl}/trip/description/${location} ${userLocation}
                 );
                 return response.status === 200 ? response.data.body.body : "No description available";
               } catch {
@@ -116,7 +117,7 @@ useEffect(() => {
             locationName.map(async (location) => {
               try {
                 const response = await axios.get(
-                  http://tomcat.localhost:8080/trip/explore/budget/${location} ${userLocation} under ${userBudget}
+                  ${baseUrl}/trip/explore/budget/${location} ${userLocation} under ${userBudget}
                 );
                 console.log(response.data.body.body);
                 return response.status === 200 ? response.data.body.body : "No price available";
@@ -146,7 +147,7 @@ useEffect(() => {
             locationName.map(async (location) => {
               try {
                 const response = await axios.get(
-                  http://tomcat.localhost:8080/trip/rating/${location} ${userLocation}
+                  ${baseUrl}/trip/rating/${location} ${userLocation}
                 );
                 console.log(response.data.body.body);
                 return response.status === 200 ? response.data.body.body : "No rating available";
@@ -175,13 +176,13 @@ useEffect(() => {
             locationName.map(async (location) => {
               try {
                 const response = await axios.get(`
-                  http://tomcat.localhost:8080/ai/image-search?query=${location} ${userLocation}`
+                  ${baseUrl}/ai/image-search?query=${location} ${userLocation}`
                 );
                 return response.status === 200 && response.data.length
                   ? response.data
-                  : [logo2, logo2, logo2];
+                  : [trip, trip, trip];
               } catch {
-                return [logo2, logo2, logo2];
+                return [trip, trip, trip];
               }
             })
           );
@@ -201,7 +202,7 @@ useEffect(() => {
               <h1 className="text-center text-3xl font-bold my-6">
                   places on {userLocation}</h1>
           <ServiceDetailCard title={locationName[0] || "place 1"}
-          images={locationImage[0] || [logo2, logo2, logo2]} 
+          images={locationImage[0] || [trip, trip, trip]} 
           description={locationDesc[0] || "No description available"}
           location={userLocation}
           mapLocation={locationName[0]+" "+userLocation}
@@ -209,7 +210,7 @@ useEffect(() => {
           rating={locationRating[0] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[1] || "place 2"}
-          images={locationImage[1] || [logo2, logo2, logo2]} 
+          images={locationImage[1] || [trip, trip, trip]} 
           description={locationDesc[1] || "No description available"}
           location={userLocation}
           mapLocation={locationName[1]+" "+userLocation}
@@ -217,7 +218,7 @@ useEffect(() => {
           rating={locationRating[1] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[2] || "place 3"}
-          images={locationImage[2] || [logo2, logo2, logo2]} 
+          images={locationImage[2] || [trip, trip, trip]} 
           description={locationDesc[2] || "No description available"}
           location={userLocation}
           mapLocation={locationName[2]+" "+userLocation}
@@ -225,7 +226,7 @@ useEffect(() => {
           rating={locationRating[2] || "No Rating available."}/>
 
           <ServiceDetailCard title={locationName[3] || "place 4"}
-          images={locationImage[3] || [logo2, logo2, logo2]} 
+          images={locationImage[3] || [trip, trip, trip]} 
           description={locationDesc[3] || "No description available"}
           location={userLocation}
           mapLocation={locationName[3]+" "+userLocation}
@@ -233,7 +234,7 @@ useEffect(() => {
           rating={locationRating[3] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[4] || "place 5"}
-          images={locationImage[4] || [logo2, logo2, logo2]} 
+          images={locationImage[4] || [trip, trip, trip]} 
           description={locationDesc[4] || "No description available"}
           location={userLocation}
           mapLocation={locationName[4]+" "+userLocation}
@@ -241,7 +242,7 @@ useEffect(() => {
           rating={locationRating[4] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[5] || "place 6"}
-          images={locationImage[5] || [logo2, logo2, logo2]} 
+          images={locationImage[5] || [trip, trip, trip]} 
           description={locationDesc[5] || "No description available"}
           location={userLocation}
           mapLocation={locationName[5]+" "+userLocation}
@@ -249,7 +250,7 @@ useEffect(() => {
           rating={locationRating[5] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[6] || "place 7"}
-          images={locationImage[6] || [logo2, logo2, logo2]} 
+          images={locationImage[6] || [trip, trip, trip]} 
           description={locationDesc[6] || "No description available"}
           location={userLocation}
           mapLocation={locationName[6]+" "+userLocation}
@@ -257,7 +258,7 @@ useEffect(() => {
           rating={locationRating[6] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[7] || "place 8"}
-          images={locationImage[7] || [logo2, logo2, logo2]} 
+          images={locationImage[7] || [trip, trip, trip]} 
           description={locationDesc[7] || "No description available"}
           location={userLocation}
           mapLocation={locationName[7]+" "+userLocation}
@@ -265,7 +266,7 @@ useEffect(() => {
           rating={locationRating[7] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[8] || "place 9"}
-          images={locationImage[8] || [logo2, logo2, logo2]} 
+          images={locationImage[8] || [trip, trip, trip]} 
           description={locationDesc[8] || "No description available"}
           location={userLocation}
           mapLocation={locationName[8]+" "+userLocation}
@@ -273,7 +274,7 @@ useEffect(() => {
           rating={locationRating[8] || "No Rating available."}/>
   
           <ServiceDetailCard title={locationName[9] || "place 10"}
-          images={locationImage[9] || [logo2, logo2, logo2]} 
+          images={locationImage[9] || [trip, trip, trip]} 
           description={locationDesc[9] || "No description available"}
           location={userLocation}
           mapLocation={locationName[9]+" "+userLocation}

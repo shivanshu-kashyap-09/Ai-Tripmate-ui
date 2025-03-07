@@ -5,12 +5,15 @@ import axios from "axios";
 const GoogleLoginButton = () => {
   const [user, setUser] = useState(null);
 
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;  
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const handleLoginSuccess = async (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/auth/google",
+        `${baseUrl}/google`,
         { token: credentialResponse.credential },
         {
           withCredentials: true,
@@ -26,7 +29,7 @@ const GoogleLoginButton = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="74437701368-28o5jnuvjvl87oviq7i1vm7b2eptooio.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={googleClientId}>
       <div>
         {user ? (
           <div>

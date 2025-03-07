@@ -1,12 +1,12 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import hellojava from "../assets/back.jpg";
+import background from "../assets/back.jpg";
 import "swiper/css";
 
 const places = [
-  { name: "Paris", img: hellojava },
-  { name: "Bali", img: hellojava },
-  { name: "New York", img: hellojava }
+  { name: "Paris", img: background },
+  { name: "Bali", img: background },
+  { name: "New York", img: background }
 ];
 
 const Recommended = () => {
