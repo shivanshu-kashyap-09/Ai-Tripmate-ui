@@ -23,178 +23,93 @@ function TripPage() {
 
     const baseUrl = import.meta.env.VITE_BASE_URL;
   
-    /*** Fetch places Names ***/
-useEffect(() => {
-  const fetchPlaces = async () => {
-    try {
-      const response = await axios.post(
-        `${baseUrl}/trip/location`,
-        { city: userLocation, budget: userBudget, days: userDays, person: userPeople },
-        { headers: { "Content-Type": "application/json" } }
-      );
+   /*** Fetch places Names ***/
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const response = await axios.post(
+          `${baseUrl}/trip/location`,
+          { city: userLocation, budget: userBudget, days: userDays, person: userPeople },
+          { headers: { "Content-Type": "application/json" } }
+        );
 
-       if (response.status === 200) {
-                const data = JSON.parse(response.data.body);
-                if (data.places && Array.isArray(data.places)) {
-                  setLocationName(data.places);
-                } else {
-                  console.error("Invalid places data format:", data);
-                }
-              } else {
-                toast.error("places not found");
-              }
-            } catch (error) {
-              console.error("Error fetching places:", error);
-              toast.error("Error. Please try again");
-            }
-          };
-  fetchPlaces();
-}, [userLocation, userBudget, userDays, userPeople]);
-
-useEffect(() => {
-  if(locationName.length == 0) return ;
-  const fetch = async () => {
-    try {
-      for(let i = 0 ; i < locationName.length ; i++){
-        const responseDesc = await axios.get(`${baseUrl}/trip/description/${location} ${userLocation}`);
-        const responsePrice = await axios.get(`${baseUrl}/trip/explore/budget/${location} ${userLocation} under ${userBudget}`);
-        const responseRating = await axios.get(`${baseUrl}/trip/rating/${location} ${userLocation}`);
-        if(responseDesc == 200){
-          setLocationDesc((prev) => [...prev , responseDesc.data.body.body]);
+        if (response.status === 200) {
+          const data = JSON.parse(response.data.body);
+          if (data.places && Array.isArray(data.places)) {
+            setLocationName(data.places);
+          } else {
+            console.error("Invalid places data format:", data);
+          }
+        } else {
+          toast.error("Places not found");
         }
-        if(responsePrice == 200){
-          setVisitPrice((prev) => [...prev , responsePrice.data.body.body]);
-        }
-        if(responseRating == 200){
-          setLocationRating((prev) => [...prev , responseRating.data.body.body]);
-        }
+      } catch (error) {
+        console.error("Error fetching places:", error);
+        toast.error("Error. Please try again");
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  fetch();
-} , [locationName]);
+    };
 
-  
-    /*** Fetch places Descriptions ***/
-    /*
-    useEffect(() => {
-      if (locationName.length === 0) return;
-  
-      const fetchDescriptions = async () => {
-        try {
-          const descriptions = await Promise.all(
-            locationName.map(async (location) => {
-              try {
-                const response = await axios.get(
-                  ${baseUrl}/trip/description/${location} ${userLocation}
-                );
-                return response.status === 200 ? response.data.body.body : "No description available";
-              } catch {
-                return "No description available";
-              }
-            })
-          );
-          setLocationDesc(descriptions);
-        } catch (error) {
-          console.error("Error fetching places descriptions:", error);
-          toast.error("Error fetching descriptions.");
+    fetchPlaces();
+  }, []);
+
+  /*** Fetch additional place details ***/
+  useEffect(() => {
+    if (locationName.length === 0) return;
+
+    const fetchDetails = async () => {
+      try {
+        const descArray = [];
+        const priceArray = [];
+        const ratingArray = [];
+
+        for (let i = 0; i < locationName.length; i++) {
+          const loc = locationName[i]; // Fix the undefined variable issue
+
+          const responseDesc = await axios.get(`${baseUrl}/trip/description/${loc} ${userLocation}`);
+          const responsePrice = await axios.get(`${baseUrl}/trip/explore/budget/${loc} ${userLocation} under ${userBudget}`);
+          const responseRating = await axios.get(`${baseUrl}/trip/rating/${loc} ${userLocation}`);
+
+          descArray.push(responseDesc.status === 200 ? responseDesc.data.body.body : "No description available");
+          priceArray.push(responsePrice.status === 200 ? responsePrice.data.body.body : "No price available");
+          ratingArray.push(responseRating.status === 200 ? responseRating.data.body.body : "No rating available");
         }
-      };
-  
-      fetchDescriptions();
-    }, [locationName]);
-  
-    /*** Fetch place Prices ***/
-    /*
-    useEffect(() => {
-      if (locationDesc.length === 0) return;
-  
-      const fetchPrices = async () => {
-        try {
-          const prices = await Promise.all(
-            locationName.map(async (location) => {
-              try {
-                const response = await axios.get(
-                  ${baseUrl}/trip/explore/budget/${location} ${userLocation} under ${userBudget}
-                );
-                console.log(response.data.body.body);
-                return response.status === 200 ? response.data.body.body : "No price available";
-              } catch {
-                return "No price available";
-              }
-            })
-          );
-          setVisitPrice(prices);
-        } catch (error) {
-          console.error("Error fetching places prices:", error);
-          toast.error("Error fetching prices.");
-        }
-      };
-  
-      fetchPrices();
-    }, [locationDesc]);
-  
-    /*** Fetch places Ratings ***/
-    /*
-    useEffect(() => {
-      if (locationDesc.length === 0) return;
-  
-      const fetchRatings = async () => {
-        try {
-          const ratings = await Promise.all(
-            locationName.map(async (location) => {
-              try {
-                const response = await axios.get(
-                  ${baseUrl}/trip/rating/${location} ${userLocation}
-                );
-                console.log(response.data.body.body);
-                return response.status === 200 ? response.data.body.body : "No rating available";
-              } catch {
-                return "No rating available";
-              }
-            })
-          );
-          setLocationRating(ratings);
-        } catch (error) {
-          console.error("Error fetching places ratings:", error);
-          toast.error("Error fetching ratings.");
-        }
-      };
-  
-      fetchRatings();
-    }, [locationDesc]);
-  
-    /*** Fetch places Images ***/
-    useEffect(() => {
-      if (locationName.length === 0) return;
-  
-      const fetchImages = async () => {
-        try {
-          const imagesArray = await Promise.all(
-            locationName.map(async (location) => {
-              try {
-                const response = await axios.get(`
-                  ${baseUrl}/ai/image-search?query=${location} ${userLocation}`
-                );
-                return response.status === 200 && response.data.length
-                  ? response.data
-                  : [trip, trip, trip];
-              } catch {
-                return [trip, trip, trip];
-              }
-            })
-          );
-          setLocationImage(imagesArray);
-        } catch (error) {
-          console.error("Error fetching images:", error);
-          toast.error("Error fetching images.");
-        }
-      };
-  
-      fetchImages();
-    }, [locationName]);
+
+        setLocationDesc(descArray);
+        setVisitPrice(priceArray);
+        setLocationRating(ratingArray);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
+
+    fetchDetails();
+  }, [locationName]);
+
+  /*** Fetch places Images ***/
+  useEffect(() => {
+    if (locationName.length === 0) return;
+
+    const fetchImages = async () => {
+      try {
+        const imagesArray = await Promise.all(
+          locationName.map(async (loc) => {
+            try {
+              const response = await axios.get(`${baseUrl}/ai/image-search?query=${loc} ${userLocation}`);
+              return response.status === 200 && response.data.length ? response.data : [logo2];
+            } catch {
+              return [logo2];
+            }
+          })
+        );
+        setLocationImage(imagesArray);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+        toast.error("Error fetching images.");
+      }
+    };
+
+    fetchImages();
+  }, [locationName]);
   
     return (
       <div>
