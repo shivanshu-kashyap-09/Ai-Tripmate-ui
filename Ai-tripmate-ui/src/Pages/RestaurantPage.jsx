@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ServiceDetailCard from '../card-details/ServiceDetailCard'
 import restaurant from '../assets/restaurant.jpg'
-import Header from '../common-components/Header'
-import Footer from '../common-components/Footer'
 import axios from "axios"
 import { toast } from 'react-toastify'
 
@@ -157,9 +155,8 @@ function RestaurantService() {
 
   return (
         <div>
-          <Header />
-          <div className="mt-20 px-6">
-          <h1 className="text-center text-3xl font-bold my-6">restaurant on {userLocation}</h1>
+          <div className="px-6">
+          <h1 className="text-center text-3xl font-bold my-6 text-blue-500">RESTAURANT SERVICE</h1>
           <ServiceDetailCard title={restaurantName[0] || "Restaurant is not available"}
           images={restaurantImage[0] || [restaurant, restaurant, restaurant]} 
           description={restaurantDesc[0] || "description is not available"}
@@ -239,7 +236,6 @@ function RestaurantService() {
           mapLocation={restaurantName[9]+" "+userLocation}
           price={restaurantPriceRange[9] || "price is not available"}
           rating={restaurantRating[9] || "Rating is not available"}/>
-          <Footer/>
           </div>
         </div>
   )

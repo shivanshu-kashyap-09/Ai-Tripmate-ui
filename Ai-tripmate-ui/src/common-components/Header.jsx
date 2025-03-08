@@ -79,17 +79,17 @@ const Header = () => {
             </button>
             {isServiceDropdownOpen && (
               <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg py-2 border border-gray-300">
-                <Link to="/service/full-trip" className="block px-4 py-2 hover:bg-gray-100">Full Trip</Link>
-                <Link to="/service/hotel" className="block px-4 py-2 hover:bg-gray-100">Hotels</Link>
-                <Link to="/service/restaurant" className="block px-4 py-2 hover:bg-gray-100">Restaurants</Link>
-                <Link to="/service/trip" className="block px-4 py-2 hover:bg-gray-100">Trips</Link>
-                <Link to="/service/travel" className="block px-4 py-2 hover:bg-gray-100">Travel</Link>
+                <Link to="/fulltripexplore" className="block px-4 py-2 hover:bg-gray-100">Full Trip</Link>
+                <Link to="/hotelexplore" className="block px-4 py-2 hover:bg-gray-100">Hotels</Link>
+                <Link to="/restaurantexplore" className="block px-4 py-2 hover:bg-gray-100">Restaurants</Link>
+                <Link to="/tripexplore" className="block px-4 py-2 hover:bg-gray-100">Trips</Link>
+                <Link to="/travelexplore" className="block px-4 py-2 hover:bg-gray-100">Travel</Link>
               </div>
             )}
           </div>
-          <Link to="#about" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">About</Link>
-          <Link to="#feedback" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">Feedback</Link>
-          <Link to="#contact" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">Contact</Link>
+          <Link to="/about" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">About</Link>
+          <Link to="/feedback" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">Feedback</Link>
+          <Link to="/contact" className="block md:inline-block px-4 py-2 text-gray-700 hover:text-blue-600">Contact</Link>
         </nav>
 
         {/* Right Section: Profile & Authentication */}

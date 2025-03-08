@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 function HotelPage() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const userLocation = params.get("location") || "Unknown Location";
-  const userBudget = params.get("budget") || "N/A";
+  const userLocation = params.get("location") || "Haridwar";
+  const userBudget = params.get("budget") || "5000";
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -195,8 +195,8 @@ function HotelPage() {
   return (
     <div>
         <Header/>
-        <div className="mt-20 px-6">
-        <h1 className="text-center text-3xl font-bold my-6">Hotels on {userLocation}</h1>
+        <div className="px-6">
+        <h1 className="text-center text-3xl font-bold my-6 text-blue-500">HOTEL SERVICE</h1>
         <ServiceDetailCard title={hotelNames[0] || "Hotel 1"}
         images={hotelImages[0] || [hotel, hotel, hotel]} 
         description={hotesDesc[0] || "No description available"}
