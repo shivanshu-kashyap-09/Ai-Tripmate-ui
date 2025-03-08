@@ -11,6 +11,13 @@ import LoginPage from "./Pages/LoginPage";
 import Signup from "./Pages/Signup";
 import GoogleLoginButton from "./Pages/GoogleLoginButton";
 import FullTripExplore from "./Explore/FullTripExplore";
+import HotelExplore from "./Explore/HotelExplore";
+import RestaurantExplore from './Explore/RestaurantExplore';
+import TripExplore from './Explore/TripExplore';
+import TravelExplore from './Explore/TravelExplore';
+import About from "./common-components/About";
+import Feedback from "./common-components/Feedback";
+import Footer from "./common-components/Footer";
 
 function App() {
   return (
@@ -19,12 +26,14 @@ function App() {
         {/* Wrap all routes inside Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="service/hotel" element={<HotelPage />} />
-          <Route path="service/restaurant" element={<RestaurantPage />} />
-          <Route path="service/travel" element={<TravelPage />} />
-          <Route path="service/trip" element={<TripPage />} />
-          <Route path="service/full-trip" element={<FullTripPage />} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/feedback" element={<Feedback/>} />
+          <Route path="/contact" element={<Footer/>} />
           <Route path="/fulltripexplore" element={<FullTripExplore />} />
+          <Route path="/hotelexplore" element={<HotelExplore />} />
+          <Route path="/restaurantexplore" element={<RestaurantExplore />} />
+          <Route path="/tripexplore" element={<TripExplore />} />
+          <Route path="/travelexplore" element={<TravelExplore />} />
         </Route>
 
         {/* Keep login and signup separate if they don't need Header/Footer */}

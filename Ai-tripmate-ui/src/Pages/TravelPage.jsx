@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import Header from '../common-components/Header';
 import TravelDetailCard from '../card-details/TravelDetailCard';
 import { useLocation } from "react-router-dom";
@@ -10,28 +10,28 @@ import axios from 'axios';
 function TravelPage() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const userLocation = params.get("location") || "Unknown Location";  
-    const destinationLocation = params.get("destinationLocation") || "Unknown Destination"; 
-    const date = params.get("date") || "No Date"; 
+    const userLocation = params.get("location") || "Unknown Location";
+    const destinationLocation = params.get("destinationLocation") || "Unknown Destination";
+    const date = params.get("date") || "No Date";
 
     const [trainName, setTrainName] = useState([]);
     const [trainTravelTime, setTrainTravelTime] = useState([]);
     const [trainTravelDuration, setTrainTravelDuration] = useState([]);
     const [trainTicket, setTrainTicket] = useState([]);
 
-    const [busName , setBusName] = useState([]);
-    const [busTravelTime , setBusTravelTime] = useState([]);
-    const [busTravelDuration , setBusTravelDuration] = useState([]);
-    const [busTicket , setBusTicket] = useState([]);
+    const [busName, setBusName] = useState([]);
+    const [busTravelTime, setBusTravelTime] = useState([]);
+    const [busTravelDuration, setBusTravelDuration] = useState([]);
+    const [busTicket, setBusTicket] = useState([]);
 
-    const [cabeName , setCabeName] = useState([]);
-    const [cabeTravelDuration , setCabeTravelDuration] = useState([]);
-    const [cabeTicket , setCabeTicket] = useState([]);
+    const [cabeName, setCabeName] = useState([]);
+    const [cabeTravelDuration, setCabeTravelDuration] = useState([]);
+    const [cabeTicket, setCabeTicket] = useState([]);
 
-    const [flightName , setFlightName] = useState([]);
-    const [flightTravelTime , setFlightTravelTime] = useState([]);
-    const [flightTravelDuration , setFlightTravelDuration] = useState([]);
-    const [flightTicket , setFlightTicket] = useState([]);
+    const [flightName, setFlightName] = useState([]);
+    const [flightTravelTime, setFlightTravelTime] = useState([]);
+    const [flightTravelDuration, setFlightTravelDuration] = useState([]);
+    const [flightTicket, setFlightTicket] = useState([]);
 
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -39,7 +39,7 @@ function TravelPage() {
     useEffect(() => {
         const fetchName = async () => {
             try {
-                const responseBus= await axios.post(`${baseUrl}/travel/bus/name`, {
+                const responseBus = await axios.post(`${baseUrl}/travel/bus/name`, {
                     "fromDes": userLocation,
                     "toDes": destinationLocation,
                     "date": date
@@ -112,49 +112,49 @@ function TravelPage() {
     }, [location, destinationLocation, date]);
 
     useEffect(() => {
-    if (trainName.length === 0) return;
+        if (trainName.length === 0) return;
 
-    const fetchTrainDetails = async () => {
-        try {
-            const requests = trainName.map((train) => 
-                Promise.all([
-                    axios.post(`${baseUrl}/travel/train/time/${train}`, {
-                        fromDes: userLocation,
-                        toDes: destinationLocation,
-                        date: date,
-                    }, { headers: { "Content-Type": "application/json" } }),
-                    axios.post(`${baseUrl}/travel/train/travel-time/${train}`, {
-                        fromDes: userLocation,
-                        toDes: destinationLocation,
-                        date: date,
-                    }, { headers: { "Content-Type": "application/json" } }),
-                    axios.post(`${baseUrl}/travel/train/ticket/${train}`, {
-                        fromDes: userLocation,
-                        toDes: destinationLocation,
-                        date: date,
-                    }, { headers: { "Content-Type": "application/json" } })
-                ])
-            );
+        const fetchTrainDetails = async () => {
+            try {
+                const requests = trainName.map((train) =>
+                    Promise.all([
+                        axios.post(`${baseUrl}/travel/train/time/${train}`, {
+                            fromDes: userLocation,
+                            toDes: destinationLocation,
+                            date: date,
+                        }, { headers: { "Content-Type": "application/json" } }),
+                        axios.post(`${baseUrl}/travel/train/travel-time/${train}`, {
+                            fromDes: userLocation,
+                            toDes: destinationLocation,
+                            date: date,
+                        }, { headers: { "Content-Type": "application/json" } }),
+                        axios.post(`${baseUrl}/travel/train/ticket/${train}`, {
+                            fromDes: userLocation,
+                            toDes: destinationLocation,
+                            date: date,
+                        }, { headers: { "Content-Type": "application/json" } })
+                    ])
+                );
 
-            const responses = await Promise.all(requests);
+                const responses = await Promise.all(requests);
 
-            setTrainTravelTime(responses.map(([timeRes]) => timeRes.data.body.body));
-            setTrainTravelDuration(responses.map(([_, durationRes]) => durationRes.data.body.body));
-            setTrainTicket(responses.map(([_, __, ticketRes]) => ticketRes.data.body.body));
+                setTrainTravelTime(responses.map(([timeRes]) => timeRes.data.body.body));
+                setTrainTravelDuration(responses.map(([_, durationRes]) => durationRes.data.body.body));
+                setTrainTicket(responses.map(([_, __, ticketRes]) => ticketRes.data.body.body));
 
-        } catch (error) {
-            console.error("Error fetching train details:", error);
-        }
-    };
+            } catch (error) {
+                console.error("Error fetching train details:", error);
+            }
+        };
 
-    fetchTrainDetails();
-}, [trainName, userLocation, destinationLocation, date]);
+        fetchTrainDetails();
+    }, [trainName, userLocation, destinationLocation, date]);
 
     useEffect(() => {
-        if(busName.length == 0)return;
+        if (busName.length == 0) return;
         const fetchBus = async () => {
             try {
-                for(let i = 0 ; i < busName.length; i++){
+                for (let i = 0; i < busName.length; i++) {
                     const responseTravelTime = await axios.post(`${baseUrl}/travel/bus/time/${busName[i]}`, {
                         "fromDes": userLocation,
                         "toDes": destinationLocation,
@@ -173,14 +173,14 @@ function TravelPage() {
                         "date": date
                     }, { headers: { "Content-Type": "application/json" } });
 
-                    if(responseTravelDuration.status === 200){
-                        setBusTravelDuration((prev) => [...prev , responseTravelDuration.data.body.body]);
+                    if (responseTravelDuration.status === 200) {
+                        setBusTravelDuration((prev) => [...prev, responseTravelDuration.data.body.body]);
                     }
-                    if(responseTravelTime.status === 200){
-                        setBusTravelTime((prev) => [...prev , responseTravelTime.data.body.body]);
+                    if (responseTravelTime.status === 200) {
+                        setBusTravelTime((prev) => [...prev, responseTravelTime.data.body.body]);
                     }
-                    if(responseTicket.status === 200){
-                        setBusTicket((prev) => [...prev , responseTicket.data.body.body]);
+                    if (responseTicket.status === 200) {
+                        setBusTicket((prev) => [...prev, responseTicket.data.body.body]);
                     }
                 }
             } catch (error) {
@@ -188,13 +188,13 @@ function TravelPage() {
             }
         }
         fetchBus();
-    } , [busName, useLocation, destinationLocation, date])
+    }, [busName, useLocation, destinationLocation, date])
 
     useEffect(() => {
-        if(cabeName.length == 0)return;
+        if (cabeName.length == 0) return;
         const fetchCabe = async () => {
             try {
-                for(let i = 0 ; i < cabeName.length; i++){
+                for (let i = 0; i < cabeName.length; i++) {
                     const responseTravelDuration = await axios.post(`${baseUrl}/travel/cabe/travel-time/${cabeName[i]}`, {
                         "fromDes": userLocation,
                         "toDes": destinationLocation,
@@ -206,11 +206,11 @@ function TravelPage() {
                         "toDes": destinationLocation,
                         "date": date
                     }, { headers: { "Content-Type": "application/json" } });
-                    if(responseTravelDuration.status === 200){
-                        setCabeTravelDuration((prev) => [...prev , responseTravelDuration.data.body.body]);
+                    if (responseTravelDuration.status === 200) {
+                        setCabeTravelDuration((prev) => [...prev, responseTravelDuration.data.body.body]);
                     }
-                    if(responseTicket.status === 200){
-                        setCabeTicket((prev) => [...prev , responseTicket.data.body.body]);
+                    if (responseTicket.status === 200) {
+                        setCabeTicket((prev) => [...prev, responseTicket.data.body.body]);
                     }
                 }
             } catch (error) {
@@ -218,13 +218,13 @@ function TravelPage() {
             }
         }
         fetchCabe();
-    } , [cabeName, useLocation, destinationLocation, date]);
+    }, [cabeName, useLocation, destinationLocation, date]);
 
     useEffect(() => {
-        if(flightName.length === 0) return;
+        if (flightName.length === 0) return;
         const fetchFlight = async () => {
             try {
-                for(let i = 0 ; i < flightName.length ; i++){
+                for (let i = 0; i < flightName.length; i++) {
                     const responseTravelTime = await axios.post(`${baseUrl}/travel/flight/time/${flightName[i]}`, {
                         "fromDes": userLocation,
                         "toDes": destinationLocation,
@@ -240,14 +240,14 @@ function TravelPage() {
                         "toDes": destinationLocation,
                         "date": date
                     }, { headers: { "Content-Type": "application/json" } });
-                    if(responseTravelTime.status === 200){
-                        setFlightTravelTime((prev) => [...prev , responseTravelTime.data.body.body]);
+                    if (responseTravelTime.status === 200) {
+                        setFlightTravelTime((prev) => [...prev, responseTravelTime.data.body.body]);
                     }
-                    if(responseTicket.status === 200){
-                        setFlightTicket((prev) => [...prev , responseTicket.data.body.body]);
+                    if (responseTicket.status === 200) {
+                        setFlightTicket((prev) => [...prev, responseTicket.data.body.body]);
                     }
-                    if(responseTravelDuration.status === 200){
-                        setFlightTravelDuration((prev) => [...prev , responseTravelDuration.data.body.body]);
+                    if (responseTravelDuration.status === 200) {
+                        setFlightTravelDuration((prev) => [...prev, responseTravelDuration.data.body.body]);
                     }
                 }
             } catch (error) {
@@ -255,18 +255,18 @@ function TravelPage() {
             }
         }
         fetchFlight();
-    } , [flightName, useLocation, destinationLocation, date]);
+    }, [flightName, useLocation, destinationLocation, date]);
 
     return (
         <div>
-            <div className="mt-20 px-6">
-                <h1 className="text-center text-3xl font-bold my-6">
-                    Travel from {userLocation} to {destinationLocation}
+            <div className="px-6">
+                <h1 className="text-center text-3xl font-bold my-6 text-blue-500">
+                    TRAVEL SERVICE
                 </h1>
-                
+
                 {/* Render all trains with their details */}
                 {trainName.map((train, index) => (
-                    <TravelDetailCard 
+                    <TravelDetailCard
                         key={index}
                         title={train || "Train1"}
                         images={[logo2, logo2, logo2]}
@@ -274,14 +274,14 @@ function TravelPage() {
                         duration={trainTravelDuration[index] || "Train travel duration not found"}
                         timing={trainTravelTime[index] || "Train travel time not found"}
                         date={date}
-                        location={userLocation}  
-                        destinationLocation={destinationLocation} 
+                        location={userLocation}
+                        destinationLocation={destinationLocation}
                         price={trainTicket[index] || "Train ticket price not found."}
                     />
                 ))}
 
-                    {busName.map((bus, index) => (
-                    <TravelDetailCard 
+                {busName.map((bus, index) => (
+                    <TravelDetailCard
                         key={index}
                         title={bus || "bus1"}
                         images={[logo2, logo2, logo2]}
@@ -289,14 +289,14 @@ function TravelPage() {
                         duration={busTravelDuration[index] || "bus travel duration not found"}
                         timing={busTravelTime[index] || "bus travel time not found"}
                         date={date}
-                        location={userLocation}  
-                        destinationLocation={destinationLocation} 
+                        location={userLocation}
+                        destinationLocation={destinationLocation}
                         price={busTicket[index] || "bus ticket price not found."}
                     />
                 ))}
 
-                    {cabeName.map((cabe, index) => (
-                    <TravelDetailCard 
+                {cabeName.map((cabe, index) => (
+                    <TravelDetailCard
                         key={index}
                         title={cabe || "cabe1"}
                         images={[logo2, logo2, logo2]}
@@ -304,13 +304,13 @@ function TravelPage() {
                         duration={cabeTravelDuration[index] || "cabe travel duration not found"}
                         timing={"N/A"}
                         date={date}
-                        location={userLocation}  
-                        destinationLocation={destinationLocation} 
+                        location={userLocation}
+                        destinationLocation={destinationLocation}
                         price={cabeTicket[index] || "cabe ticket price not found."}
                     />
                 ))}
                 {flightName.map((flight, index) => (
-                    <TravelDetailCard 
+                    <TravelDetailCard
                         key={index}
                         title={flight || "flight1"}
                         images={[logo2, logo2, logo2]}
@@ -318,8 +318,8 @@ function TravelPage() {
                         duration={flightTravelDuration[index] || "flight travel duration not found"}
                         timing={flightTravelTime[index] || "flight travel time not found"}
                         date={date}
-                        location={userLocation}  
-                        destinationLocation={destinationLocation} 
+                        location={userLocation}
+                        destinationLocation={destinationLocation}
                         price={flightTicket[index] || "flight ticket price not found."}
                     />
                 ))}

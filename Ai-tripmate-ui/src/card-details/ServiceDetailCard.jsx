@@ -21,17 +21,11 @@ const ServiceDetailCard = ({ title, images, description, location, price, rating
   return (
     <section className="py-5 bg-gray-100 w-full flex justify-center">
       <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-full md:w-4/5 overflow-hidden border border-gray-300">
-        {/* Left Side: Image Slider */}
+        {/* Left Side: Image */}
         <div className="w-full md:w-1/3 relative">
-          <Slider {...sliderSettings}>
-            {images?.map((img, i) => (
-              <div key={i}>
-                <img src={img} alt={title} className="w-full h-56 md:h-full object-cover" />
-              </div>
-            ))}
-          </Slider>
+          <img src={images} alt="Service" className="w-full h-56 md:h-80 object-cover" />
           <div className="absolute top-2 left-2 bg-blue-700 text-white text-sm font-semibold px-2 py-1 rounded-md">
-            {rating} <span className="text-xs">/10</span>
+            {rating}
           </div>
         </div>
 
@@ -56,9 +50,9 @@ const ServiceDetailCard = ({ title, images, description, location, price, rating
           {/* Price & Ratings */}
           <div className="flex justify-between items-center mt-4">
             <div>
-              <span className="text-red-500 text-sm line-through">₹{originalPrice}</span>
-              <span className="text-xl font-bold text-gray-800 ml-2">₹{price}</span>
-              <span className="text-gray-500 text-xs ml-1">+ ₹{discount} taxes and charges</span>
+              <span className="text-red-500 text-sm line-through">{originalPrice}</span>
+              <span className="text-xl font-bold text-gray-800 ml-2">{price}</span>
+              <span className="text-gray-500 text-xs ml-1">+ {discount} taxes and charges</span>
             </div>
             <div className="flex items-center bg-blue-100 px-2 py-1 rounded-md">
               <FaStar className="text-yellow-500 mr-1" />

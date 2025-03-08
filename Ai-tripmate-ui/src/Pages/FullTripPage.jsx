@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import HotelPage from './HotelPage'
 import RestaurantPage from './RestaurantPage'
-import TripPage from './TripPage'
+import TripPage from './Trippage'
 import TravelPage from './TravelPage'
 
 function FullTrip() {
@@ -18,7 +18,7 @@ function FullTrip() {
   return (
     <div>
       <div className="mt-20 px-6">
-        <h1 className="text-center text-3xl font-bold my-6">full on {userLocation} to {destination}</h1>
+        <h1 className="text-center text-3xl font-bold my-6">FULL TRIP SERVICE</h1>
         <HotelPage />
         <RestaurantPage />
         <TripPage />
