@@ -11,6 +11,7 @@ const FullTripExplore = () => {
     const [isLookingForFlights, setIsLookingForFlights] = useState(false);
 
     return (
+        <>
         <div className="relative w-full h-[400px] bg-cover bg-center text-white flex flex-col items-center justify-center"
             style={{ backgroundImage: `url(${logo})` }}>
             <div className="text-center">
@@ -78,8 +79,13 @@ const FullTripExplore = () => {
                     I'm looking for flights
                 </label>
             </div>
-            <ServiceDetailCard/>
         </div>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            </>
     );
 };
 
