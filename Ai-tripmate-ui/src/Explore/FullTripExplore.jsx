@@ -80,12 +80,13 @@ const FullTripExplore = () => {
                 </label>
             </div>
         </div>
-        <ServiceDetailCard/>
-        <ServiceDetailCard/>
-        <ServiceDetailCard/>
-        <ServiceDetailCard/>
-        <ServiceDetailCard/>
-        </>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            <ServiceDetailCard/>
+            </>
     );
 };
 
