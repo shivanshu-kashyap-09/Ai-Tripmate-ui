@@ -85,6 +85,7 @@ const FullTripExplore = () => {
             <ServiceDetailCard/>
             <ServiceDetailCard/>
             <ServiceDetailCard/>
+            <ServiceDetailCard/>
             </>
     );
 };
