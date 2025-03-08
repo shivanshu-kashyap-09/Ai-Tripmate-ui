@@ -45,13 +45,40 @@ function RestaurantService() {
       }
     }
     fetchName();
-  }, [userLocation]);
+  }, [userLocation , userBudget]);
 
   useEffect(() => {
+    if(restaurantName.length == 0) return;
+    const fetch = async () => {
+      try {
+        for(let i = 0 ; i < restaurantName.length ; i++){
+          const responseDesc = await axios.get(`${baseUrl}/resturent/description/${restaurantName[i]}" "${userLocation}`);
+        const responsePriceRange = await axios.get(`${baseUrl}/resturent/price/${restaurantName[i]}" "${userLocation} under ${userBudget}`);
+        const responseRating = await axios.get(`${baseUrl}/resturent/rating/${restaurantName[i]}" "${userLocation}`);
+        if(responseDesc.status == 200){
+          setRestaurantDesc((prev) => [...prev , responseDesc.data.body.body])
+        }
+        if(responsePriceRange.status == 200){
+          setRestaurantPriceRange((prev) => [...prev , responsePriceRange.data.body.body])
+        }
+        if(responseRating.status == 200){
+          setRestaurantRating((prev) => [...prev , responseRating.data.body.body])
+          }
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetch();
+  } , [restaurantName])
+/*
+  useEffect(() => {
+    if(restaurantName.length == 0) return;
     const fetchDesc = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`${baseUrl}/resturent/description/${restaurantName[i]}" "${userLocation}`)
+          const response = await axios.get(`http://tomcat.localhost:8080/resturent/description/${restaurantName[i]}" "${userLocation}`)
 
           if (response.status === 200) {
             setRestaurantDesc((prev) => [...prev, response.data.body.body]);
@@ -67,10 +94,11 @@ function RestaurantService() {
   },[restaurantName]);
 
   useEffect(() => {
+    if(restaurantDesc.length == 0) return;
     const fetchPrice = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`${baseUrl}/resturent/price/${restaurantName[i]}" "${userLocation}`)
+          const response = await axios.get(`http://tomcat.localhost:8080/resturent/price/${restaurantName[i]}" "${userLocation}`)
           if(response.status === 200){
             setRestaurantPriceRange((prev) => [...prev, response.data.body.body]);
           }else{
@@ -83,13 +111,14 @@ function RestaurantService() {
       }
     }
     fetchPrice();
-  },[restaurantName]);
+  },[restaurantDesc]);
 
   useEffect(() => {
+    if(restaurantPriceRange.length == 0) return;
     const fetchRating = async () => {
       try {
         for(let i = 0 ; i < restaurantName.length; i++) {
-          const response = await axios.get(`${baseUrl}/resturent/rating//${restaurantName[i]}" "${userLocation}`);
+          const response = await axios.get(`http://tomcat.localhost:8080/resturent/rating/${restaurantName[i]}" "${userLocation}`);
           if(response.status === 200){
             setRestaurantRating((prev) => [...prev, response.data.body.body]);
           }else{
@@ -102,7 +131,8 @@ function RestaurantService() {
       }
     }
     fetchRating();
-  }, [restaurantName]);
+  }, [restaurantPriceRange]);
+  */
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -113,7 +143,7 @@ function RestaurantService() {
           if (response.status === 200 && response.data.length) {
             imagesArray.push(response.data); 
           } else {
-            imagesArray.push([restaurant, restaurant, restaurant]); 
+            imagesArray.push([logo2, logo2, logo2]); 
           }
         }
         setRestaurantImage(imagesArray);

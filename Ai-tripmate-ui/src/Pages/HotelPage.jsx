@@ -26,9 +26,7 @@ function HotelPage() {
         const response = await axios.post(
           `${baseUrl}/hotel/name`,
           { city: userLocation, budget: userBudget },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
+          { headers: { "Content-Type": "application/json" } }
         );
 
         if (response.status === 200) {
@@ -42,7 +40,7 @@ function HotelPage() {
           toast.error("Hotels not found");
         }
       } catch (error) {
-        console.error("Error occurred while fetching hotels:", error);
+        console.error("Error fetching hotels:", error);
         toast.error("Error. Please try again");
       }
     };
@@ -51,86 +49,146 @@ function HotelPage() {
   }, [userLocation, userBudget]);
 
   useEffect(() => {
-    const fetchDes = async () => {
+    const fetch = async () =>{
+      if (hotelNames.length === 0) return;
       try {
-        for (let i = 0; i < hotelNames.length; i++) {
-          const response = await axios.get(
-            `${baseUrl}/hotel/description/${hotelNames[i]}" "${userLocation}`
-          );
-          if (response.status === 200) {
-            setHotelDesc((prev) => [...prev, response.data.body.body]); 
-          } else {
-            setHotelDesc((prev) => [...prev, "No description available"]);
+        for(let i = 0 ; i < hotelNames.length ; i++){
+          const responseDesc = await axios.get(`${baseUrl}/hotel/description/${hotelNames[i]} ${userLocation}`);
+          const responsePriceRange = await axios.get(`${baseUrl}/hotel/price/${hotelNames[i]} ${userLocation} under ${userBudget}`);
+          const responseRating = await axios.get(`${baseUrl}/hotel/rating/${hotelNames[i]} ${userLocation}`);
+          if (responseDesc.status === 200 ){
+            setHotelDesc((prev) => [...prev, responseDesc.data.body.body]);
           }
-        }
-        console.log(hotesDesc[8] , hotesDesc[9]);
+          if (responsePriceRange.status === 200 ){
+            setHotelPriceRange((prev) => [...prev, responsePriceRange.data.body]);
+          }
+          if (responseRating.status === 200 ){
+            setHotelRating((prev) => [...prev, responseRating.data.body]);
+          }
+        }  
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetch();
+  },[hotelNames])
+
+  /*** Fetch Hotel Descriptions ***/
+  /*
+  useEffect(() => {
+    if (hotelNames.length === 0) return;
+
+    const fetchDescriptions = async () => {
+      try {
+        const descriptions = await Promise.all(
+          hotelNames.map(async (hotel) => {
+            try {
+              const response = await axios.get(
+                `http://tomcat.localhost:8080/hotel/description/${hotel} ${userLocation}`
+              );
+              return response.status === 200 ? response.data.body.body : "No description available";
+            } catch {
+              return "No description available";
+            }
+          })
+        );
+        setHotelDesc(descriptions);
       } catch (error) {
         console.error("Error fetching hotel descriptions:", error);
         toast.error("Error fetching descriptions.");
       }
     };
 
-    fetchDes();
+    fetchDescriptions();
   }, [hotelNames]);
 
+  /*** Fetch Hotel Prices ***/
+  /*
   useEffect(() => {
-    const fetchPrice = async () =>{
-      try {
-        for(let i = 0 ; i < hotelNames.length ; i++){
-          const response = await axios.get(`${baseUrl}/hotel/price/${hotelNames[i]}" "${userLocation}" under "${userBudget}"`);
-          if(response.status === 200 && response.data.body){
-            setHotelPriceRange((prev) => [...prev, response.data.body]);
-          }else{
-            setHotelPriceRange((prev) => [...prev, "No price available"]);
-          }
-        }
-      } catch (error) {
-        console.log(error)
-        toast.error("Error!!")
-      }
-    }
-    fetchPrice();
-  } , [hotelNames]);
+    if (hotelDesc.length === 0) return;
 
-  useEffect(() => {
-    const fetchRating = async () => {
+    const fetchPrices = async () => {
       try {
-        for(let i = 0 ; i < hotelNames.length ; i++){
-          const response = await axios.get(`${baseUrl}/hotel/rating/${hotelNames[i]}" "${userLocation}`);
-          if(response.status == 200 && response.data.body){
-            setHotelRating((prev) => [...prev, response.data.body]);
-            console.log(response)
-          }else{
-            setHotelRating((prev) => [...prev, "No rating available"]);
-          }
-        }
+        const prices = await Promise.all(
+          hotelNames.map(async (hotel) => {
+            try {
+              const response = await axios.get(
+                `http://tomcat.localhost:8080/hotel/price/${hotel} ${userLocation} under ${userBudget}`
+              );
+              console.log(response.data.body)
+              return response.status === 200 ? response.data.body : "No price available";
+            } catch {
+              return "No price available";
+            }
+          })
+        );
+        setHotelPriceRange(prices);
       } catch (error) {
-        console.log(error);
-        toast.error("Error!!");
+        console.error("Error fetching hotel prices:", error);
+        toast.error("Error fetching prices.");
       }
-    }
-    fetchRating();
-  } , [hotelNames]);
+    };
 
+    fetchPrices();
+  }, [hotelDesc]);
+
+  /*** Fetch Hotel Ratings ***/
+  /*
   useEffect(() => {
+    if (hotelPriceRange.length === 0) return;
+
+    const fetchRatings = async () => {
+      try {
+        const ratings = await Promise.all(
+          hotelNames.map(async (hotel) => {
+            try {
+              const response = await axios.get(
+                `http://tomcat.localhost:8080/hotel/rating/${hotel} ${userLocation}`
+              );
+              console.log(response.data.body)
+              return response.status === 200 ? response.data.body : "No rating available";
+            } catch {
+              return "No rating available";
+            }
+          })
+        );
+        setHotelRating(ratings);
+      } catch (error) {
+        console.error("Error fetching hotel ratings:", error);
+        toast.error("Error fetching ratings.");
+      }
+    };
+
+    fetchRatings();
+  }, [hotelPriceRange]);
+
+  /*** Fetch Hotel Images ***/
+  useEffect(() => {
+    if (hotelNames.length === 0) return;
+
     const fetchImages = async () => {
       try {
-        const imagesArray = [];
-        for(let i = 0 ; i < hotelNames.length ; i++){
-          const response = await axios.get(`${baseUrl}/ai/image-search?query=${hotelNames[i]}" "${userLocation}`);
-          if (response.status === 200 && response.data.length) {
-            imagesArray.push(response.data); 
-          } else {
-            imagesArray.push([hotel, hotel, hotel]); 
-          }
-        }
+        const imagesArray = await Promise.all(
+          hotelNames.map(async (hotel) => {
+            try {
+              const response = await axios.get(
+                `${baseUrl}/ai/image-search?query=${hotel} ${userLocation}`
+              );
+              return response.status === 200 && response.data.length
+                ? response.data
+                : [logo2, logo2, logo2];
+            } catch {
+              return [logo2, logo2, logo2];
+            }
+          })
+        );
         setHotelImages(imagesArray);
       } catch (error) {
         console.error("Error fetching images:", error);
         toast.error("Error fetching images.");
       }
     };
-  
+
     fetchImages();
   }, [hotelNames]);
 
