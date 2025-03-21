@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa";
+import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
 import logo from "../assets/hotelBg.jpg";
@@ -32,19 +32,24 @@ const HotelExplore = () => {
 
     return (
         <>
-            <div className="relative w-full h-[400px] bg-cover bg-center text-white flex flex-col items-center justify-center"
-                style={{ backgroundImage: `url(${logo})` }}>
-                <div className="text-center mt-23">
-                    <h1 className="text-4xl font-bold text-black mt-5">💎 "Your Home Away from Home."</h1>
-                    {/* <p className="text-lg mt-2 text-black">Discover dreamy villas, houses, cabins & more</p> */}
+            <div
+                className="relative w-full h-[400px] bg-cover bg-center text-white flex flex-col items-center justify-center px-4"
+                style={{ backgroundImage: `url(${logo})` }}
+            >
+                <div className="text-center">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mt-5">
+                        💎 "Your Home Away from Home."
+                    </h1>
                 </div>
 
-                {/* Options */}
-                <div className="flex bg-white rounded-lg shadow-lg p-2 space-x-4 text-black mt-8 mb-15">
+                {/*Navigation Options*/}
+                <div className="relative z-30 flex flex-wrap sm:flex-wrap lg:flex-row justify-center bg-white rounded-lg shadow-lg p-2 gap-2 sm:gap-4 text-black mt-6 sm:mt-8 w-full lg:w-auto max-w-md lg:max-w-full overflow-x-auto">
                     {["FullTrip", "Hotel", "Restaurant", "Trip", "Travel"].map((option) => (
                         <button
                             key={option}
-                            className={`px-4 py-2 rounded-md text-sm font-medium ${selectedOption === option ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-200"
+                            className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium ${selectedOption === option
+                                    ? "bg-blue-600 text-white"
+                                    : "text-gray-700 hover:bg-gray-200"
                                 }`}
                             onClick={() => handleOptionChange(option)}
                         >
@@ -53,24 +58,24 @@ const HotelExplore = () => {
                     ))}
                 </div>
 
-                {/* Search Bar */}
-                <div className="absolute bottom-10 bg-white rounded-lg shadow-lg p-4 flex flex-wrap items-center gap-4 w-[80%] max-w-4xl text-black">
 
-                    {/* Destination */}
-                    <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1">
+                {/* 🔥 Search Bar - Now Below Navigation */}
+                <div className="relative z-20 mt-6 sm:mt-10 bg-white rounded-lg shadow-lg p-4 flex flex-col sm:flex-row gap-4 w-[90%] sm:w-[80%] max-w-4xl text-black">
+
+                    {/* Destination Input */}
+                    <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
                         <FaMapMarkerAlt className="text-gray-500 mr-2" />
                         <input
                             type="text"
                             value={destination}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                setDestination(inputValue);
-                            }}
+                            onChange={(e) => setDestination(e.target.value)}
                             className="outline-none w-full"
+                            placeholder="Enter destination"
                         />
                     </div>
+
                     {/* Budget Dropdown */}
-                    <div className="relative flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1">
+                    <div className="relative flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
                         <BiRupee className="text-gray-500 mr-2" />
 
                         {/* Input Field (Manually Editable) */}
@@ -89,7 +94,7 @@ const HotelExplore = () => {
 
                         {/* Dropdown List */}
                         {showDropdownList && (
-                            <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md mt-1 z-10">
+                            <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md mt-1 z-40 max-h-[200px] overflow-y-auto">
                                 {budgetOptions.map((option) => (
                                     <div
                                         key={option}
@@ -111,14 +116,17 @@ const HotelExplore = () => {
                     </div>
 
                     {/* Search Button */}
-                    <form onSubmit={handleSearch}>
-                        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center">
+                    <form onSubmit={handleSearch} className="w-full sm:w-auto">
+                        <button
+                            type="submit"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center w-full sm:w-auto justify-center"
+                        >
                             <FaSearch className="mr-2" /> Search
                         </button>
                     </form>
-
                 </div>
             </div>
+
             <HotelPage />
         </>
     );

@@ -4,7 +4,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ServiceDetailCard = ({ title, images, description, location, price, rating, mapLocation, originalPrice, discount, reviews }) => {
+const ServiceDetailCard = ({ 
+  title, images, description, location, price, rating, 
+  mapLocation, originalPrice, discount, reviews 
+}) => {
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -18,9 +21,22 @@ const ServiceDetailCard = ({ title, images, description, location, price, rating
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapLocation)}`, "_blank");
   };
 
+  const shareService = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        text: `Check out this service: ${title}`,
+        url: window.location.href,
+      }).catch(err => console.error("Error sharing:", err));
+    } else {
+      alert("Sharing is not supported on this browser.");
+    }
+  };
+
   return (
     <section className="py-5 bg-gray-100 w-full flex justify-center">
       <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-full md:w-4/5 overflow-hidden border border-gray-300">
+        
         {/* Left Side: Image */}
         <div className="w-full md:w-1/3 relative">
           <img src={images} alt="Service" className="w-full h-56 md:h-80 object-cover" />
@@ -42,9 +58,6 @@ const ServiceDetailCard = ({ title, images, description, location, price, rating
                 Show on map
               </button>
             </div>
-            <span className="text-green-700 text-sm font-semibold bg-green-100 px-2 py-1 rounded-md mt-2 inline-block">
-              Early 2025 Deal
-            </span>
           </div>
 
           {/* Price & Ratings */}
@@ -61,17 +74,28 @@ const ServiceDetailCard = ({ title, images, description, location, price, rating
             </div>
           </div>
 
-          {/* Buttons */}
-          <div className="flex items-center mt-4">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
-              See availability
+          {/* Buttons: Share & Map */}
+          <div className="flex justify-between items-center mt-4">
+            {/* Share Button */}
+            <button 
+              onClick={shareService} 
+              className="flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm transition duration-300"
+            >
+              <FaShareAlt className="mr-2" /> Share
             </button>
-            <FaShareAlt className="text-blue-500 text-2xl ml-4 cursor-pointer hover:text-blue-700" title="Share" />
+
+            {/* Map Button */}
+            <button 
+              onClick={openGoogleMaps} 
+              className="flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm transition duration-300"
+            >
+              <FaMapMarkerAlt className="mr-2" /> View on Map
+            </button>
           </div>
+
         </div>
       </div>
     </section>
-    
   );
 };
 

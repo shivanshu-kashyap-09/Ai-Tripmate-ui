@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Travel.service.RecommendedService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @RequestMapping("/recommended")
 @CrossOrigin(origins = "http://localhost:5173")
-//@CrossOrigin(origins = "*")
+@Slf4j
 public class RecommendedController {
 	
 	@Autowired
@@ -27,7 +29,7 @@ public class RecommendedController {
 			ResponseEntity<?> response = recommendedService.recommendedPlace();
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in recommended place " +e);
+			log.error("Error occured in recommended place : " +e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -38,7 +40,7 @@ public class RecommendedController {
 			ResponseEntity<?> response = recommendedService.placeDesc(place);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in recommended place " +e);
+			log.error("Error occured in recommended place : " +e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}

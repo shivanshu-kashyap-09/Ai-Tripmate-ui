@@ -21,15 +21,12 @@ const TravelDetailCard = ({ title, images, description, duration, timing, locati
   return (
     <section className="py-5 bg-gray-100 w-screen">
       <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-screen overflow-hidden">
-        {/* Left Side: Image Slider */}
-        <div className="w-full md:w-1/2">
-          <Slider {...sliderSettings}>
-            {images?.map((img, i) => (
-              <div key={i}>
-                <img src={img} alt={title} className="w-full h-80 object-cover rounded-2xl" />
-              </div>
-            ))}
-          </Slider>
+        {/* Left Side*/}
+        <div className="w-full md:w-1/3 relative">
+          <img src={images} alt="Service" className="w-full h-56 md:h-80 object-cover" />
+          <div className="absolute top-2 left-2 bg-blue-700 text-white text-sm font-semibold px-2 py-1 rounded-md">
+            {rating}
+          </div>
         </div>
 
         {/* Right Side: Details */}

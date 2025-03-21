@@ -1,5 +1,7 @@
 package com.example.Travel.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.TripEntity;
 import com.example.Travel.service.TripService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/trip")
 @CrossOrigin(origins = "http://localhost:5173")
-//@CrossOrigin(origins = "*")
+@Slf4j
 public class TripController {
 	
 	@Autowired
@@ -29,7 +34,7 @@ public class TripController {
 			ResponseEntity<?> response = tripService.getLocation(tripEntity);
 			return new ResponseEntity<>(response,HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in trip location "+e);
+			log.error("Error occured in trip location : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -40,7 +45,7 @@ public class TripController {
 			ResponseEntity<?> response = tripService.getTime(location);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in trip location "+e);
+			log.error("Error occured in trip explore time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -51,7 +56,7 @@ public class TripController {
 			ResponseEntity<?> response = tripService.getBudget(location);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in trip location "+e);
+			log.error("Error occured in trip budget : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -62,7 +67,7 @@ public class TripController {
 			ResponseEntity<?> response = tripService.getPlaceDesc(location);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in trip location "+e);
+			log.error("Error occured in trip description : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -74,7 +79,18 @@ public class TripController {
 			ResponseEntity<?> response = tripService.getPlaceRating(location);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in trip location "+e);
+			log.error("Error occured in trip rating : "+e);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping("/details")
+	public ResponseEntity<?> getDetails(@RequestBody TripEntity tripEntity){
+		try {
+			List<JournalEntity> response = tripService.getDetails(tripEntity);
+			return new ResponseEntity<>(response , HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Error occured in trip places desc : " + e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}

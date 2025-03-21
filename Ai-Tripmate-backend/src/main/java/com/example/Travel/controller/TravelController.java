@@ -1,5 +1,7 @@
 package com.example.Travel.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,17 +10,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.TravelEntity;
 import com.example.Travel.service.TravelService;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/travel")
 @CrossOrigin(origins = "http://localhost:5173")
-//@CrossOrigin(origins = "*")
+@Slf4j
 public class TravelController {
 	
 	@Autowired
@@ -30,7 +34,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getTrainName(travelEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in get train name "+e);
+			log.error("Error occured in get train name : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -42,7 +46,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getTrainTiming(travelEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("error occured in train time "+e);
+			log.error("error occured in train time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -54,7 +58,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getTrainTravelTime(travelEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in train travel time "+e);
+			log.error("Error occured in train travel time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -66,7 +70,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getTrainTicket(travelEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in train tickets "+e);
+			log.error("Error occured in train tickets : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -77,7 +81,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getBusName(travelEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in get bus names "+e);
+			log.error("Error occured in get bus names : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -89,7 +93,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getBusTiming(travelEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("error occured in bus time "+e);
+			log.error("error occured in bus time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -101,7 +105,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getBusTravelTime(travelEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in bus travel time "+e);
+			log.error("Error occured in bus travel time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -113,7 +117,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getBusTicket(travelEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in bus tickets "+e);
+			log.error("Error occured in bus tickets : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -124,7 +128,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getCabeName(travelEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in get cabe name "+e);
+			log.error("Error occured in cabe name : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -137,7 +141,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getCabeTravelTime(travelEntity, cabeName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in cabe travel time "+e);
+			log.error("Error occured in cabe travel time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -149,7 +153,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getCabeTicket(travelEntity, cabeName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in cabe tickets "+e);
+			log.error("Error occured in cabe tickets : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -160,7 +164,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getFlightName(travelEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in get flight name "+e);
+			log.error("Error occured in get flight name : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -172,7 +176,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getFlightTiming(travelEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("error occured in flight time "+e);
+			log.error("error occured in flight time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -184,7 +188,7 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getFlightTravelTime(travelEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in flight travel time "+e);
+			log.error("Error occured in flight travel time : "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -196,7 +200,18 @@ public class TravelController {
 			ResponseEntity<?> response = travelService.getFlightTicket(travelEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("Error occured in flight tickets "+e);
+			log.error("Error occured in flight tickets : "+e);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping("details")
+	public ResponseEntity<?> getDetails(@RequestBody TravelEntity travelEntity){
+		try {
+			List<JournalEntity> response = travelService.travelDetails(travelEntity);
+			return new ResponseEntity<>(response , HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Error occurred in travel details: ", e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
