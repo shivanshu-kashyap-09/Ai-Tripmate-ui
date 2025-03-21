@@ -17,8 +17,6 @@ public class AuthUser {
     private String name;
     private String picture;
 
-    public AuthUser() {}
-
     public AuthUser(String email, String name, String picture) {
         this.email = email;
         this.name = name;

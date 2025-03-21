@@ -1,7 +1,5 @@
 package com.example.Travel.entity;
 
-import java.util.List;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,11 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document(collection = "public")
 @Getter
  @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "public")
 public class PublicEntity {
 
 	@Id

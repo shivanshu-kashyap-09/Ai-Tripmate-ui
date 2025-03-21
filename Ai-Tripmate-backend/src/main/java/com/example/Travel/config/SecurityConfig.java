@@ -1,5 +1,6 @@
 package com.example.Travel.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,11 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
+	
+	@Value("${frontEnd.uri}")
+	private String frontEndUri;
+
+	
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -24,7 +30,7 @@ public class SecurityConfig {
             )
             .csrf(AbstractHttpConfigurer::disable)
             .oauth2Login(oauth2 -> oauth2
-                .loginPage("/oauth2/authorization/google") // Adjust based on provider
+                .loginPage("/oauth2/authorization/google")
             );
         
         return http.build();
@@ -33,8 +39,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Allow frontend
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(List.of(frontEndUri)); 
+        configuration.setAllowedMethods(List.of("GET", "POST"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 

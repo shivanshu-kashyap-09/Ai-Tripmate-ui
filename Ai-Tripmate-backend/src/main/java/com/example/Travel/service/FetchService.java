@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Service
+@Slf4j
 public class FetchService {
 	
 	private final ChatClient chatClient;
@@ -27,6 +30,15 @@ public class FetchService {
 		} catch (Exception e) {
 			System.out.println("Error occured in fetch "+e);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	public String getData(String message) {
+		try {
+			String response = chatClient.prompt().user(message).call().content();
+			return response;
+		} catch (Exception e) {
+			log.error("Error occured in fetch "+e);
+			return null;
 		}
 	}
 

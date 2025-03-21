@@ -22,8 +22,9 @@ public class GoogleAuthController {
 	
 	@Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String CLIENT_ID;
-    @Autowired
-    private AuthRepo authRepo;
+	
+	@Autowired
+	private AuthRepo authRepo;
     
     @PostMapping("/google")
     public ResponseEntity<?> verifyGoogleToken(@RequestBody TokenRequest request) {

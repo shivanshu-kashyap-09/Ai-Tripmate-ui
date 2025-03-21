@@ -14,8 +14,10 @@ import com.example.Travel.entity.PublicEntity;
 import com.example.Travel.repository.PublicRepo;
 
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class PublicService {
 
 		@Autowired
@@ -40,7 +42,7 @@ public class PublicService {
 		           }
 		        }
 		}catch(Exception e) {
-			System.out.println("Error occured in signup : "+e);
+			log.error("Error occured in signup : "+e);
 		}
 		return false;
 	}
@@ -56,22 +58,18 @@ public class PublicService {
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Error oCcured in login : "+e);
+			log.error("Error occured in login : "+e);
 		}
 		return null;
 	}
 
 	public void generateAndSendOTP(String email) throws MessagingException, jakarta.mail.MessagingException {
         if (email != null) {
-            String emailOtp = generateOtp();
+            String emailOtp = String.format("%06d", new Random().nextInt(999999));
             otpStorage.put(email, emailOtp);
             otpTimestampStorage.put(email, LocalDateTime.now());
-            sendEmail(email, "ChatApp", "Your ChatApp verification OTP is: " + emailOtp);
+            sendEmail(email, "Ai-Tripmate", "Your Ai-Tripmate verification OTP is : " + emailOtp);
         }
-    }
-	
-	private String generateOtp() {
-        return String.format("%06d", new Random().nextInt(999999));
     }
 	
 	private void sendEmail(String to, String subject, String body) throws MessagingException, jakarta.mail.MessagingException {
