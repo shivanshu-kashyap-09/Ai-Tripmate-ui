@@ -70,44 +70,47 @@ public class ImageController {
         }
     }
     
-    @GetMapping("/image-search")
-    public ResponseEntity<?> searchImages(@RequestParam String query) {
+    @GetMapping("/search")
+    public String searchImages(@RequestParam String query) {
         try {
-        	JournalEntity exploreName = journalRepo.findByExploreName(query);
-        	if(exploreName.getImage() == null) {
-        		
-        		HttpHeaders headers = new HttpHeaders();
-        		headers.set("Authorization", API_KEY);
-        		
-        		HttpEntity<String> entity = new HttpEntity<>(headers);
-        		
-        		ResponseEntity<Map> response = restTemplate.exchange(PEXELS_URL + query, 
-        				HttpMethod.GET, 
-        				entity, 
-        				Map.class);
-        		
-        		// Extract the "photos" array from the response
-//        		List<Map<String, Object>> photos = (List<Map<String, Object>>) response.getBody().get("photos");
-//        		
-//        		if (photos == null || photos.isEmpty()) {
-//        			return ResponseEntity.ok(Collections.singletonList("No images found."));
-//        		}
-        		String imageUrl = (String) response.getBody().get("photos");
-        		// Extract the first 3 image URLs
-//        		List<String> imageUrls = photos.stream()
-//        				.limit(3) // Get only first 3 images
-//        				.map(photo -> (Map<String, Object>) photo.get("src")) // Extract "src" object
-//        				.map(src -> (String) src.get("medium")) // Get the "medium" size URL
-//        				.collect(Collectors.toList());
-        		exploreName.setImage(imageUrl);
-        		return ResponseEntity.ok(imageUrl);
-        	}else {
-        		return ResponseEntity.ok(exploreName.getImage());
-        	}
+            JournalEntity exploreName = journalRepo.findByExploreName(query);
 
+            if (exploreName == null) {
+                return "No entry found for: " + query;
+            }
+
+            if (exploreName.getImage() == null || exploreName.getImage().trim().isEmpty()) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("Authorization", API_KEY);
+
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                ResponseEntity<Map> response = restTemplate.exchange(PEXELS_URL + query,
+                        HttpMethod.GET, entity, Map.class);
+
+                if (response.getBody() == null || !response.getBody().containsKey("photos")) {
+                    return "No images found.";
+                }
+
+                List<Map<String, Object>> photos = (List<Map<String, Object>>) response.getBody().get("photos");
+
+                if (photos.isEmpty()) {
+                    return "No images found.";
+                }
+
+                // Extract a single image URL
+                String imageUrl = ((Map<String, Object>) photos.get(0).get("src")).get("medium").toString();
+
+                // Save image URL to the database
+                exploreName.setImage(imageUrl);
+                journalRepo.save(exploreName);
+
+                return imageUrl;
+            } else {
+                return exploreName.getImage(); // Return stored image
+            }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body(Collections.singletonList("Error fetching images: " + e.getMessage()));
+            return "Error fetching images: " + e.getMessage();
         }
     }
 }

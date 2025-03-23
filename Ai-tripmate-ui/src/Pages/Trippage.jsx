@@ -13,7 +13,7 @@ function TripPage() {
   const userPeople = params.get("people") || "5";
   const userDays = params.get("days") || "5";
 
-  const[tripDetails , setTripDetails] = useState([]);
+  const [tripDetails, setTripDetails] = useState([]);
 
   const [locationName, setLocationName] = useState([]);
   const [locationDesc, setLocationDesc] = useState([]);
@@ -25,19 +25,19 @@ function TripPage() {
 
   useEffect(() => {
     const fetchDetails = async () => {
-        try {
-            const response = await axios.post(`${baseUrl}/trip/details`, {
-              city: userLocation, budget: userBudget, days: userDays, person: userPeople
-            }, { headers: { "Content-Type": "application/json" } }
-            );
-            if (response.status === 200)
-                setTripDetails(response.data);
-        } catch (error) {
-            toast.error("Error occured in fetch details : ", e);
-        }
+      try {
+        const response = await axios.post(`${baseUrl}/trip/details`, {
+          city: userLocation, budget: userBudget, days: userDays, person: userPeople
+        }, { headers: { "Content-Type": "application/json" } }
+        );
+        if (response.status === 200)
+          setTripDetails(response.data);
+      } catch (error) {
+        toast.error("Error occured in fetch details : ", e);
+      }
     }
     fetchDetails();
-}, []);
+  }, []);
 
   /*** Fetch places Names ***/
   // useEffect(() => {
@@ -131,14 +131,14 @@ function TripPage() {
     <div>
       <div className="px-6">
         <h1 className="text-center text-3xl font-bold my-6 text-blue-500">
-                  TRIP SERVICE</h1>
-                  {tripDetails.length > 0 ? (
-          
+          TRIP SERVICE</h1>
+        {tripDetails.length > 0 ? (
+
           tripDetails.map((tripDetail, index) => (
             <div key={index}>
               <ServiceDetailCard
                 title={tripDetail.exploreName || "Hotel"}
-                images={trip}
+                images={tripDetail.image}
                 description={tripDetail.description || "No description available"}
                 location={userLocation}
                 mapLocation={`${tripDetail.exploreName} ${userLocation}`}

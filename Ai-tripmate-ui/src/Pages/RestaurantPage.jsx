@@ -64,7 +64,7 @@ function RestaurantService() {
             <div key={index}>
               <ServiceDetailCard
                 title={restaurnatDetail.exploreName || "restaurant"}
-                images={restaurant}
+                images={restaurnatDetail.image}
                 description={restaurnatDetail.description || "No description available"}
                 location={userLocation}
                 mapLocation={`${restaurnatDetail.exploreName} ${userLocation}`}
