@@ -24,8 +24,8 @@ function HotelPage() {
           city: useLocation, budget: userBudget
         }, { headers: { "Content-Type": "application/json" } }
         );
-        if(response.status === 200)
-        setHotelDetails(response.data);
+        if (response.status === 200)
+          setHotelDetails(response.data);
       } catch (error) {
         toast.error("Error occured in fetch details : ", e);
       }
@@ -68,12 +68,12 @@ function HotelPage() {
         <h1 className="text-center text-3xl font-bold my-6 text-blue-500">HOTEL SERVICE</h1>
 
         {hotelDetails.length > 0 ? (
-          
+
           hotelDetails.map((hotelDetail, index) => (
             <div key={index}>
               <ServiceDetailCard
                 title={hotelDetail.exploreName || "Hotel"}
-                images={hotel}
+                images={hotelDetail.image}
                 description={hotelDetail.description || "No description available"}
                 location={userLocation}
                 mapLocation={`${hotelDetail.exploreName} ${userLocation}`}

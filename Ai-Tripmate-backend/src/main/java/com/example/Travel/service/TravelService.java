@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.Travel.controller.ImageController;
 import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.TravelEntity;
 import com.example.Travel.repository.JournalRepo;
@@ -28,6 +29,9 @@ public class TravelService {
 
 	@Autowired
 	private JournalRepo journalRepo;
+	
+	@Autowired
+	private ImageController imageController;
 
 	public ResponseEntity<?> getTrainName(TravelEntity travelEntity) {
 		try {
@@ -297,7 +301,7 @@ public class TravelService {
 
 	private JournalEntity validateAndUpdateTravelData(JournalEntity travelName, TravelEntity travelEntity) {
 	    boolean needsUpdate = false;
-	    CompletableFuture<String> time = null, travelTime = null, ticket = null;
+	    CompletableFuture<String> time = null, travelTime = null, ticket = null , image = null;
 
 	    if (travelName.getTime() == null || travelName.getTime().trim().isEmpty()) {
 	        needsUpdate = true;
@@ -313,12 +317,19 @@ public class TravelService {
 	        needsUpdate = true;
 	        ticket = fetchAsyncData(travelName.getExploreName(), travelEntity, "ticket");
 	    }
+	    
+	    if(travelName.getImage() == null || travelName.getImage().trim().isEmpty()) {
+	    	needsUpdate = true;
+	    	image = fetchAsyncData(travelName.getExploreName() , travelEntity , "image");
+	    }
 
 	    if (needsUpdate) {
 	        CompletableFuture.allOf(time, travelTime, ticket).join();
 	        travelName.setTime(time != null ? time.join() : travelName.getTime());
 	        travelName.setTravelTime(travelTime != null ? travelTime.join() : travelName.getTravelTime());
 	        travelName.setTicket(ticket != null ? ticket.join() : travelName.getTicket());
+	        travelName.setImage(image != null ? image.join() : travelName.getImage());
+	        
 	        journalRepo.save(travelName);
 	    }
 	    return travelName;
@@ -331,12 +342,14 @@ public class TravelService {
 	    CompletableFuture<String> time = fetchAsyncData(travelName, travelEntity, "time");
 	    CompletableFuture<String> travelTime = fetchAsyncData(travelName, travelEntity, "travelTime");
 	    CompletableFuture<String> ticket = fetchAsyncData(travelName, travelEntity, "ticket");
+	    CompletableFuture<String> image = fetchAsyncData(travelName , travelEntity , "image");
 
-	    CompletableFuture.allOf(time, travelTime, ticket).join();
+	    CompletableFuture.allOf(time, travelTime, ticket , image).join();
 
 	    newJournalEntity.setTime(time.join());
 	    newJournalEntity.setTravelTime(travelTime.join());
 	    newJournalEntity.setTicket(ticket.join());
+	    newJournalEntity.setImage(image.join());
 
 	    journalRepo.save(newJournalEntity);
 	    return newJournalEntity;
@@ -353,6 +366,7 @@ public class TravelService {
 	        case "ticket" -> "Give only ticket details in the format: 'Executive Class - 1090 | AC Chair Car - 755 | Chair Car - 60' " +
 	                         "for " + travelName + " from " + travelEntity.getFromDes() + " to " + travelEntity.getToDes() +
 	                         " on " + travelEntity.getDate() + ". Do NOT include any additional text.";
+	        case "image" -> imageController.searchImages(travelName);
 	        default -> throw new IllegalArgumentException("Invalid query type: " + queryType);
 	    };
 	    return CompletableFuture.supplyAsync(() -> fetchService.getData(query));

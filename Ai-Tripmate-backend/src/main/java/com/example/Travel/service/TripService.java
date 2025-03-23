@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.Travel.controller.ImageController;
 import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.TripEntity;
 import com.example.Travel.repository.JournalRepo;
@@ -28,6 +29,9 @@ public class TripService {
 
 	@Autowired
 	private JournalRepo journalRepo;
+	
+	@Autowired
+	private ImageController imageController;
 
 	public ResponseEntity<?> getLocation(TripEntity tripEntity) {
 		try {
@@ -146,7 +150,7 @@ public class TripService {
 
 	private JournalEntity validateAndUpdateLocationData(JournalEntity locationData, String price) {
 		boolean needsUpdate = false;
-		CompletableFuture<String> descFuture = null, priceFuture = null, ratingFuture = null;
+		CompletableFuture<String> descFuture = null, priceFuture = null, ratingFuture = null , imageFuture = null;
 
 		if (locationData.getDescription() == null || locationData.getDescription().trim().isEmpty()) {
 			needsUpdate = true;
@@ -166,6 +170,11 @@ public class TripService {
 					.getData("Provide only the Google review rating of " + locationData.getExploreName()
 							+ " place. No extra text, no descriptions, just the rating value."));
 		}
+		
+		if(locationData.getImage() == null || locationData.getImage().trim().isEmpty()) {
+			needsUpdate = true;
+			imageFuture = CompletableFuture.supplyAsync(() -> imageController.searchImages(locationData.getExploreName()));
+		}
 
 		if (needsUpdate) {
 			if (descFuture != null)
@@ -174,6 +183,8 @@ public class TripService {
 				locationData.setPriceRange(priceFuture.join());
 			if (ratingFuture != null)
 				locationData.setRating(ratingFuture.join());
+			if(imageFuture != null)
+				locationData.setImage(imageFuture.join());
 
 			journalRepo.save(locationData);
 		}
@@ -196,9 +207,12 @@ public class TripService {
 				.getData("Provide only the Google review rating of " + locationName
 				+ " place. No extra text, no descriptions, just the rating value."));
 	    
+	   CompletableFuture<String> imageFuture = CompletableFuture.supplyAsync(() -> imageController.searchImages(locationName));
+	    
 	    newJournalEntity.setDescription(descFuture.join());
 	    newJournalEntity.setPriceRange(priceFuture.join());
 	    newJournalEntity.setRating(ratingFuture.join());
+	    newJournalEntity.setImage(imageFuture.join());
 	    
 	    journalRepo.save(newJournalEntity);
 	    return newJournalEntity;

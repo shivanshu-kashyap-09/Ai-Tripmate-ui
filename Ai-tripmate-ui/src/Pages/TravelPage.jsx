@@ -302,7 +302,7 @@ function TravelPage() {
                     <TravelDetailCard
                         key={index}
                         title={travel.exploreName || "Train1"}
-                        images={travel}
+                        images={travel.image}
                         description="Exciting travel experience"
                         duration={travel.travelTime || "Train travel duration not found"}
                         timing={travel.time || "Train travel time not found"}
