@@ -9,19 +9,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Document("restaurants")
-public class RestaurantEntity {
+@Document("feedback")
+public class FeedbackEntity {
 	
 	@Id
 	private ObjectId id;
 	
-	private String restaurantName;
+	private String userEmail;
 	
-	private String restaurantDescription;
+	private String rating;
 	
-	private String restaurantPrice;
+	private String userName;
 	
-	private String restaurantRating;
-	
-	private String restaurantImage;
+	private String userComment;
+
 }

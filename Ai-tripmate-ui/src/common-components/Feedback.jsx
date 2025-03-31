@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 const Feedback = () => {
   const [formData, setFormData] = useState({
@@ -8,15 +9,41 @@ const Feedback = () => {
     comments: "",
   });
 
+  const userName = (localStorage.getItem("loginUserName"));
+  const userEmail = (localStorage.getItem("loginEmail"));
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Thank you for your feedback!");
-    setFormData({ name: "", email: "", rating: "5", comments: "" });
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    try {
+      const response = await axios.post(
+        `${baseUrl}/public/feedback`,
+        {
+          userName: formData.name,
+          userEmail: formData.email,
+          rating: formData.rating,
+          userComment: formData.comments,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Thank you for your feedback!");
+        setFormData({ name: "", email: "", rating: "5", comments: "" });
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Failed to submit feedback. Please try again later.");
+    }
   };
+
+
 
   return (
     <section id="feedback" className="py-12 bg-blue-100 ">
@@ -29,36 +56,36 @@ const Feedback = () => {
         <form onSubmit={handleSubmit} className="mt-6 max-w-lg mx-auto bg-gray-100 p-6  rounded-lg shadow-md  text-black">
           <div className="mb-4">
             <label className="block text-left font-semibold mb-1"> Name</label>
-            <input 
-              type="text" 
-              name="name" 
+            <input
+              type="text"
+              name="name"
               placeholder="Enter Your Name"
-              value={formData.name} 
-              onChange={handleChange} 
+              value={userName === null ? "Name" : userName}
+              onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required 
+              required
             />
           </div>
 
           <div className="mb-4">
             <label className="block text-left font-semibold mb-1">Email Address</label>
-            <input 
-              type="email" 
-              name="email" 
+            <input
+              type={"email"}
+              name="email"
               placeholder="Enter Your Email Address"
-              value={formData.email} 
-              onChange={handleChange} 
+              value={userEmail === null ? "email" : userEmail}
+              onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required 
+              required
             />
           </div>
 
           <div className="mb-4">
             <label className="block text-left font-semibold mb-1">Rating</label>
-            <select 
-              name="rating" 
-              value={formData.rating} 
-              onChange={handleChange} 
+            <select
+              name="rating"
+              value={formData.rating}
+              onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
@@ -71,19 +98,19 @@ const Feedback = () => {
 
           <div className="mb-4">
             <label className="block text-left font-semibold mb-1">Comments</label>
-            <textarea 
-              name="comments" 
+            <textarea
+              name="comments"
               placeholder="Comments"
-              value={formData.comments} 
-              onChange={handleChange} 
-              rows="4" 
+              value={formData.comments}
+              onChange={handleChange}
+              rows="4"
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required 
+              required
             ></textarea>
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
           >
             Submit Feedback

@@ -1,15 +1,27 @@
 package com.example.Travel.entity;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Document("travels")
 public class TravelEntity {
 	
-	private String fromDes;
+	@Id
+	private ObjectId id;
 	
-	private String toDes;
+	private String travelName;
 	
-	private String date;
+	private String travelStratTime;
+	
+	private String travelTicket;
+	
+	private String travelDuration;
+	
+	private String travelImage;
 }

@@ -1,217 +1,129 @@
 import React, { useState } from "react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "../assets/logo.jpg";
+import { Link } from "react-router-dom";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-const Signup = ({ onClose }) => {
+const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    birthDate: { day: "", month: "", year: "" },
     termsAccepted: false,
   });
 
   const [errors, setErrors] = useState({});
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name.startsWith("birthDate")) {
-      const field = name.split(".")[1];
-      setFormData((prev) => ({
-        ...prev,
-        birthDate: { ...prev.birthDate, [field]: value },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-      newErrors.email = "Invalid email format.";
-    if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
-    if (!formData.termsAccepted) newErrors.termsAccepted = "You must accept the terms.";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    console.log("Form Submitted:", formData);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-3xl w-full relative">
-        {/* Close Button */}
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-lg">
-          ✕
-        </button>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <div className="fixed inset-0 bg-gray-100 flex flex-col items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-2xl max-w-5xl w-full flex flex-col md:flex-row overflow-hidden relative">
+          <button
+            onClick={() => navigate("/")}
+            className="absolute top-4 right-4 text-gray-600 text-2xl hover:text-gray-900 transition"
+          >
+            ✖
+          </button>
 
-        {/* Title */}
-        <h2 className="text-3xl font-semibold text-center mb-6">
-          <span className="text-5xl font-bold text-blue-950">Ai TripMate</span> Account
-        </h2>
-
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Benefits Image */}
-          <div className="hidden md:block w-1/2">
-            <img src={logo} alt="Logo" className="w-full rounded-lg" />
+          <div className="w-full flex md:hidden items-center justify-center bg-blue-50 p-6">
+            <img src={logo} alt="Logo" className="w-full h-50 object-contain rounded-lg shadow-lg" />
           </div>
 
-          {/* Signup Form */}
-          <form className="flex-1 space-y-4" onSubmit={handleSubmit}>
-            <div className="flex gap-4">
-              <div className="w-1/2">
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  className="border p-2 rounded-lg w-full"
-                  onChange={handleChange}
-                  required
-                />
-                {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+          <div className="md:w-1/2 p-8 flex flex-col justify-center">
+            <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">
+              AI TripMate Account
+            </h2>
+
+            <form className="space-y-5">
+              <div className="flex gap-4">
+                <input type="text" name="firstName" placeholder="First Name" className="border border-gray-300 p-3 rounded-lg w-1/2" onChange={handleChange} />
+                <input type="text" name="lastName" placeholder="Last Name" className="border border-gray-300 p-3 rounded-lg w-1/2" onChange={handleChange} />
               </div>
-              <div className="w-1/2">
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  className="border p-2 rounded-lg w-full"
-                  onChange={handleChange}
-                  required
-                />
-                {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+
+              <div className="flex">
+                <input type="email" name="email" placeholder="Email" className="border border-gray-300 p-3 rounded-lg w-full" onChange={handleChange} />
+                <button type="button" onClick={() => toast.success("OTP Sent!")} className="bg-blue-600 text-white px-4 rounded-lg ml-2 hover:bg-blue-900 transition">
+                  OTP
+                </button>
               </div>
-            </div>
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="border p-2 rounded-lg w-full"
-              onChange={handleChange}
-              required
-            />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  className="border border-gray-300 p-3 rounded-lg w-full pr-12"
+                  onChange={handleChange}
+                />
+                <span
+                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="border p-2 rounded-lg w-full"
-              onChange={handleChange}
-              required
-            />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              <div className="relative w-full">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  className="border border-gray-300 p-3 rounded-lg w-full pr-12"
+                  onChange={handleChange}
+                />
+                <span
+                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
 
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              className="border p-2 rounded-lg w-full"
-              onChange={handleChange}
-              required
-            />
-            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+              <button className="bg-blue-600 text-white py-3 rounded-lg w-full hover:bg-blue-900 transition-all">
+                Sign Up
+              </button>
 
-            {/* Birth Date */}
-            <div className="flex gap-2">
-              <select
-                name="birthDate.day"
-                className="border p-2 rounded-lg w-1/3"
-                onChange={handleChange}
-                required
-              >
-                <option value="">Day</option>
-                {[...Array(31)].map((_, i) => (
-                  <option key={i} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
+              <div className="mt-2 flex justify-center">
+                <GoogleLogin onSuccess={() => toast.success("Google Signup Successful!")} />
+              </div>
 
-              <select
-                name="birthDate.month"
-                className="border p-2 rounded-lg w-1/3"
-                onChange={handleChange}
-                required
-              >
-                <option value="">Month</option>
-                {[
-                  "January", "February", "March", "April", "May", "June",
-                  "July", "August", "September", "October", "November", "December",
-                ].map((month, i) => (
-                  <option key={i} value={month}>
-                    {month}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                name="birthDate.year"
-                className="border p-2 rounded-lg w-1/3"
-                onChange={handleChange}
-                required
-              >
-                <option value="">Year</option>
-                {[...Array(100)].map((_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            {/* Terms & Conditions */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="termsAccepted"
-                className="mr-2"
-                onChange={handleChange}
-                required
-              />
-              <label className="text-sm">
-                I agree to the{" "}
-                <span className="text-blue-600 cursor-pointer">Ai TripMate Terms of Service</span>
-              </label>
-            </div>
-            {errors.termsAccepted && <p className="text-red-500 text-sm">{errors.termsAccepted}</p>}
-
-            {/* Signup Button */}
-            <button
-              type="submit"
-              className="bg-blue-600 text-white p-3 rounded-lg w-full hover:bg-blue-900"
-            >
-              CREATE FREE ACCOUNT →
-            </button>
-
-            {/* Login Link */}
-            <p className="text-center mt-4 text-sm">
-              Have an account?{" "}
-              <span className="text-blue-500 cursor-pointer" onClick={onClose}>Log in</span>
-            </p>
-          </form>
+              <p className="text-center text-sm">
+                Have an account? <Link to="/login" className="text-blue-500">Log in</Link>
+              </p>
+            </form>
+          </div>
+          <div className="md:w-1/2 hidden md:flex items-center justify-center bg-blue-50">
+            <img src={logo} alt="Logo" className="w-3/4 object-contain rounded-lg shadow-lg" />
+          </div>
         </div>
       </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 

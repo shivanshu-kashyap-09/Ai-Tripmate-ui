@@ -29,9 +29,9 @@ public class TripController {
 	private TripService tripService;
 	
 	@PostMapping("/location")
-	public ResponseEntity<?> getLocation(@RequestBody TripEntity tripEntity){
+	public ResponseEntity<?> getLocation(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> response = tripService.getLocation(tripEntity);
+			ResponseEntity<?> response = tripService.getLocation(journalEntity);
 			return new ResponseEntity<>(response,HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in trip location : "+e);
@@ -85,9 +85,9 @@ public class TripController {
 	}
 	
 	@PostMapping("/details")
-	public ResponseEntity<?> getDetails(@RequestBody TripEntity tripEntity){
+	public ResponseEntity<?> getDetails(@RequestBody JournalEntity journalEntity){
 		try {
-			List<JournalEntity> response = tripService.getDetails(tripEntity);
+			List<TripEntity> response = tripService.getDetails(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in trip places desc : " + e);

@@ -21,7 +21,7 @@ function HotelPage() {
     const fetchDetails = async () => {
       try {
         const response = await axios.post(`${baseUrl}/hotel/details`, {
-          city: useLocation, budget: userBudget
+          city: userLocation, budget: userBudget
         }, { headers: { "Content-Type": "application/json" } }
         );
         if (response.status === 200)
@@ -33,35 +33,6 @@ function HotelPage() {
     fetchDetails();
   }, [userLocation, userBudget]);
 
-  // useEffect(() => {
-  //   if (hotelNames.length === 0) return;
-
-  //   const fetchImages = async () => {
-  //     try {
-  //       const imagesArray = await Promise.all(
-  //         hotelNames.map(async (hotel) => {
-  //           try {
-  //             const response = await axios.get(
-  //               `${baseUrl}/ai/image-search?query=${hotel} ${userLocation}`
-  //             );
-  //             return response.status === 200 && response.data.length
-  //               ? response.data
-  //               : [logo2, logo2, logo2];
-  //           } catch {
-  //             return [logo2, logo2, logo2];
-  //           }
-  //         })
-  //       );
-  //       setHotelImages(imagesArray);
-  //     } catch (error) {
-  //       console.error("Error fetching images:", error);
-  //       toast.error("Error fetching images.");
-  //     }
-  //   };
-
-  //   fetchImages();
-  // }, [hotelNames]);
-
   return (
     <div>
       <div className="px-6">
@@ -72,13 +43,13 @@ function HotelPage() {
           hotelDetails.map((hotelDetail, index) => (
             <div key={index}>
               <ServiceDetailCard
-                title={hotelDetail.exploreName || "Hotel"}
-                images={hotelDetail.image}
-                description={hotelDetail.description || "No description available"}
+                title={hotelDetail.hotelName || "Hotel"}
+                images={hotelDetail.hotelImage || hotel}
+                description={hotelDetail.hotelDescription || "No description available"}
                 location={userLocation}
-                mapLocation={`${hotelDetail.exploreName} ${userLocation}`}
-                price={hotelDetail.priceRange || "No price range available"}
-                rating={hotelDetail.rating || "No Rating available."}
+                mapLocation={`${hotelDetail.hotelName} ${userLocation}`}
+                price={hotelDetail.hotelPrice || "No price range available"}
+                rating={hotelDetail.hotelRating || "No Rating available."}
               />
             </div>
           ))

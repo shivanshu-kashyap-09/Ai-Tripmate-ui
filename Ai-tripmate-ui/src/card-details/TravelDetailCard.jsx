@@ -1,75 +1,71 @@
-import { FaShareAlt, FaStar, FaMapMarkerAlt } from "react-icons/fa";
-import Slider from "react-slick";
+import { FaShareAlt, FaMapMarkerAlt } from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const TravelDetailCard = ({ title, images, description, duration, timing, location, destinationLocation, date, price}) => {
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-  };
-
+const TravelDetailCard = ({ title, images, description, duration, timing, location, destinationLocation, date, price }) => {
   const openGoogleMaps = () => {
     const googleMapsURL = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(location)}&destination=${encodeURIComponent(destinationLocation)}`;
     window.open(googleMapsURL, "_blank");
   };
 
+  const shareService = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: title,
+          text: `Check out this service: ${title}`,
+          url: window.location.href,
+        })
+        .catch((err) => console.error("Error sharing:", err));
+    } else {
+      alert("Sharing is not supported on this browser.");
+    }
+  };
+
   return (
-    <section className="py-5 bg-gray-100 w-screen">
-      <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-screen overflow-hidden">
-        {/* Left Side*/}
+    <section className="py-5 bg-gray-100 w-full flex justify-center">
+      <div className="bg-white shadow-lg rounded-lg flex h-[350px] flex-col md:flex-row w-full md:w-4/5 overflow-hidden border border-gray-300">
         <div className="w-full md:w-1/3 relative">
           <img src={images} alt="Service" className="w-full h-56 md:h-80 object-cover" />
-          <div className="absolute top-2 left-2 bg-blue-700 text-white text-sm font-semibold px-2 py-1 rounded-md">
-            {rating}
-          </div>
         </div>
 
-        {/* Right Side: Details */}
         <div className="w-full md:w-1/2 p-6 flex flex-col justify-between">
-          <div className="pb-6">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">{title}</h2>
+          <div>
+            <h2 className="text-3xl font-bold text-blue-800 mb-2">{title}</h2>
             <p className="text-gray-600">{description}</p>
 
-            {/* Duration */}
             <div className="mt-3">
-              <p className="font-medium text-gray-700">Duration: <span className="text-gray-900">{duration}</span></p>
+              <p className="font-medium text-gray-700">
+                Duration: <span className="text-gray-900">{duration}</span>
+              </p>
             </div>
 
-            {/* Timing */}
             <div className="mt-2">
-              <p className="font-medium text-gray-700">Timing: <span className="text-gray-900">{timing}</span></p>
-              <p className="font-medium text-gray-700">Date: <span className="text-gray-900">{date}</span></p>            
+              <p className="font-medium text-gray-700">
+                Timing: <span className="text-gray-900">{timing}</span>
+              </p>
+              <p className="font-medium text-gray-700">
+                Date: <span className="text-gray-900">{date}</span>
+              </p>
             </div>
 
-            {/* Location */}
             <div className="flex items-center mt-4 text-gray-700">
               <FaMapMarkerAlt className="text-red-500 mr-2" />
               <span>{location} → {destinationLocation}</span>
             </div>
           </div>
 
-          {/* Price & Rating */}
-          <div>
-            <div className="flex items-center">
-              <span className="text-xl font-semibold text-green-700 pr-[30%]">{price}</span>
-              <div className="flex items-center">
-                <FaStar className="text-yellow-500" />
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center mt-4 space-x-6">
-              <FaShareAlt className="text-blue-500 text-2xl cursor-pointer hover:text-blue-700" title="Share" />
-              <FaMapMarkerAlt
-                className="text-red-500 text-2xl cursor-pointer hover:text-red-700"
-                title="Open in Google Maps"
-                onClick={openGoogleMaps}
-              />
+          {/* Price and Buttons Inline */}
+          <div className="flex items-center justify-between mt-4">
+            <span className="text-xl font-semibold text-blue-500">{price}</span>
+            
+            <div className="flex gap-3">
+              <button onClick={shareService} className="p-2 rounded-full shadow-md hover:bg-gray-200 transition">
+                <FaShareAlt className="text-blue-600" size={20} />
+              </button>
+              <button onClick={openGoogleMaps} className="p-2 rounded-full shadow-md hover:bg-gray-200 transition">
+                <FaMapMarkerAlt className="text-red-500" size={20} />
+              </button>
             </div>
           </div>
         </div>
