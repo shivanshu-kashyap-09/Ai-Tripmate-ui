@@ -15,12 +15,6 @@ function TripPage() {
 
   const [tripDetails, setTripDetails] = useState([]);
 
-  const [locationName, setLocationName] = useState([]);
-  const [locationDesc, setLocationDesc] = useState([]);
-  const [visitPrice, setVisitPrice] = useState([]);
-  const [locationRating, setLocationRating] = useState([]);
-  const [locationImage, setLocationImage] = useState([]);
-
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
@@ -39,94 +33,6 @@ function TripPage() {
     fetchDetails();
   }, []);
 
-  /*** Fetch places Names ***/
-  // useEffect(() => {
-  //   const fetchPlaces = async () => {
-  //     try {
-  //       const response = await axios.post(
-  //         `${baseUrl}/trip/location`,
-  //         { city: userLocation, budget: userBudget, days: userDays, person: userPeople },
-  //         { headers: { "Content-Type": "application/json" } }
-  //       );
-
-  //       if (response.status === 200) {
-  //         const data = JSON.parse(response.data.body);
-  //         if (data.placesNames && Array.isArray(data.placesNames)) {
-  //           setLocationName(data.placesNames);
-  //         } else {
-  //           console.error("Invalid places data format:", data);
-  //         }
-  //       } else {
-  //         toast.error("Places not found");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching places:", error);
-  //       toast.error("Error. Please try again");
-  //     }
-  //   };
-
-  //   fetchPlaces();
-  // }, []);
-
-  // /*** Fetch additional place details ***/
-  // useEffect(() => {
-  //   if (locationName.length === 0) return;
-
-  //   const fetchDetails = async () => {
-  //     try {
-  //       const descArray = [];
-  //       const priceArray = [];
-  //       const ratingArray = [];
-
-  //       for (let i = 0; i < locationName.length; i++) {
-  //         const loc = locationName[i]; // Fix the undefined variable issue
-
-  //         const responseDesc = await axios.get(`${baseUrl}/trip/description/${loc} ${userLocation}`);
-  //         const responsePrice = await axios.get(`${baseUrl}/trip/explore/budget/${loc} ${userLocation} under ${userBudget}`);
-  //         const responseRating = await axios.get(`${baseUrl}/trip/rating/${loc} ${userLocation}`);
-
-  //         descArray.push(responseDesc.status === 200 ? responseDesc.data.body.body : "No description available");
-  //         priceArray.push(responsePrice.status === 200 ? responsePrice.data.body.body : "No price available");
-  //         ratingArray.push(responseRating.status === 200 ? responseRating.data.body.body : "No rating available");
-  //       }
-
-  //       setLocationDesc(descArray);
-  //       setVisitPrice(priceArray);
-  //       setLocationRating(ratingArray);
-  //     } catch (error) {
-  //       console.error("Error fetching details:", error);
-  //     }
-  //   };
-
-  //   fetchDetails();
-  // }, [locationName]);
-
-  // /*** Fetch places Images ***/
-  // useEffect(() => {
-  //   if (locationName.length === 0) return;
-
-  //   const fetchImages = async () => {
-  //     try {
-  //       const imagesArray = await Promise.all(
-  //         locationName.map(async (loc) => {
-  //           try {
-  //             const response = await axios.get(`${baseUrl}/ai/image-search?query=${loc} ${userLocation}`);
-  //             return response.status === 200 && response.data.length ? response.data : [logo2];
-  //           } catch {
-  //             return [logo2];
-  //           }
-  //         })
-  //       );
-  //       setLocationImage(imagesArray);
-  //     } catch (error) {
-  //       console.error("Error fetching images:", error);
-  //       toast.error("Error fetching images.");
-  //     }
-  //   };
-
-  //   fetchImages();
-  // }, [locationName]);
-
   return (
     <div>
       <div className="px-6">
@@ -137,13 +43,13 @@ function TripPage() {
           tripDetails.map((tripDetail, index) => (
             <div key={index}>
               <ServiceDetailCard
-                title={tripDetail.exploreName || "Hotel"}
-                images={tripDetail.image}
-                description={tripDetail.description || "No description available"}
+                title={tripDetail.locationName || "location"}
+                images={tripDetail.locationImage | trip}
+                description={tripDetail.locationDescription || "No description available"}
                 location={userLocation}
-                mapLocation={`${tripDetail.exploreName} ${userLocation}`}
-                price={tripDetail.priceRange || "No price range available"}
-                rating={tripDetail.rating || "No Rating available."}
+                mapLocation={`${tripDetail.locationName} ${userLocation}`}
+                price={tripDetail.locationVisitPrice || "No price range available"}
+                rating={tripDetail.locationRating || "No Rating available."}
               />
             </div>
           ))

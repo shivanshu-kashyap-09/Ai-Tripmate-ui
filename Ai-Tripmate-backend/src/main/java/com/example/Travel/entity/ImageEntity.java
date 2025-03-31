@@ -9,19 +9,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Document("restaurants")
-public class RestaurantEntity {
+@Document("Images")
+public class ImageEntity {
 	
 	@Id
 	private ObjectId id;
 	
-	private String restaurantName;
+	private String exploreName;
 	
-	private String restaurantDescription;
-	
-	private String restaurantPrice;
-	
-	private String restaurantRating;
-	
-	private String restaurantImage;
+	private String image;
+
 }

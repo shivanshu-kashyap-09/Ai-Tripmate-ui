@@ -9,19 +9,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Document("restaurants")
-public class RestaurantEntity {
+@Document("most-visited-places")
+public class MostVisitedPlacesEntity {
 	
 	@Id
 	private ObjectId id;
 	
-	private String restaurantName;
+	private String mostVisitPlaceName;
 	
-	private String restaurantDescription;
+	private String mostVisitPlaceDescription;
 	
-	private String restaurantPrice;
+	private String mostVisitPlaceImage;
 	
-	private String restaurantRating;
-	
-	private String restaurantImage;
+	private String mostVisitPlaceAddress;
+
 }

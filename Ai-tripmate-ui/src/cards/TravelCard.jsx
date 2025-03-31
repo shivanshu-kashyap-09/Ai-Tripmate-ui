@@ -49,7 +49,7 @@ function TravelCard({ title, images, description, showBooking, navigateTo}) {
             </Slider>
           </div>
   
-          {/* Description + Booking Form */}
+          {/* Description*/}
           <div className="w-full md:w-1/2 p-6 flex flex-col justify-center bg-gradient-to-r from-blue-100 to- blue-90">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">{title}</h2>
             <p className="text-gray-600 text-lg">{description}</p>

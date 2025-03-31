@@ -29,9 +29,9 @@ public class TravelController {
 	private TravelService travelService;
 	
 	@PostMapping("/train/name")
-	public ResponseEntity<?> getTrainName(@RequestBody TravelEntity travelEntity){
+	public ResponseEntity<?> getTrainName(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> response = travelService.getTrainName(travelEntity);
+			ResponseEntity<?> response = travelService.getTrainName(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in get train name : "+e);
@@ -40,10 +40,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/train/time/{trainName}")
-	public ResponseEntity<?> getTrainTime(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getTrainTime(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String trainName){
 		try {
-			ResponseEntity<?> response = travelService.getTrainTiming(travelEntity, trainName);
+			ResponseEntity<?> response = travelService.getTrainTiming(journalEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("error occured in train time : "+e);
@@ -52,10 +52,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/train/travel-time/{trainName}")
-	public ResponseEntity<?> getTrainTravelTime(@RequestBody TravelEntity travelEntity ,
+	public ResponseEntity<?> getTrainTravelTime(@RequestBody JournalEntity journalEntity ,
 			@PathVariable String trainName){
 		try {
-			ResponseEntity<?> response = travelService.getTrainTravelTime(travelEntity, trainName);
+			ResponseEntity<?> response = travelService.getTrainTravelTime(journalEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in train travel time : "+e);
@@ -64,10 +64,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/train/ticket/{trainName}")
-	public ResponseEntity<?> getTrainTickets(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getTrainTickets(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String trainName){
 		try {
-			ResponseEntity<?> response = travelService.getTrainTicket(travelEntity, trainName);
+			ResponseEntity<?> response = travelService.getTrainTicket(journalEntity, trainName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in train tickets : "+e);
@@ -76,9 +76,9 @@ public class TravelController {
 	}
 	
 	@PostMapping("/bus/name")
-	public ResponseEntity<?> getBusName(@RequestBody TravelEntity travelEntity){
+	public ResponseEntity<?> getBusName(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> response = travelService.getBusName(travelEntity);
+			ResponseEntity<?> response = travelService.getBusName(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in get bus names : "+e);
@@ -87,10 +87,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/bus/time/{busName}")
-	public ResponseEntity<?> getBusTime(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getBusTime(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String busName){
 		try {
-			ResponseEntity<?> response = travelService.getBusTiming(travelEntity, busName);
+			ResponseEntity<?> response = travelService.getBusTiming(journalEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("error occured in bus time : "+e);
@@ -99,10 +99,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/bus/travel-time/{busName}")
-	public ResponseEntity<?> getBusTravelTime(@RequestBody TravelEntity travelEntity ,
+	public ResponseEntity<?> getBusTravelTime(@RequestBody JournalEntity journalEntity ,
 			@PathVariable String busName){
 		try {
-			ResponseEntity<?> response = travelService.getBusTravelTime(travelEntity, busName);
+			ResponseEntity<?> response = travelService.getBusTravelTime(journalEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in bus travel time : "+e);
@@ -111,10 +111,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/bus/ticket/{busName}")
-	public ResponseEntity<?> getBusTickets(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getBusTickets(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String busName){
 		try {
-			ResponseEntity<?> response = travelService.getBusTicket(travelEntity, busName);
+			ResponseEntity<?> response = travelService.getBusTicket(journalEntity, busName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in bus tickets : "+e);
@@ -123,9 +123,9 @@ public class TravelController {
 	}
 	
 	@PostMapping("/cabe/name")
-	public ResponseEntity<?> getCabeName(@RequestBody TravelEntity travelEntity){
+	public ResponseEntity<?> getCabeName(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> response = travelService.getCabeName(travelEntity);
+			ResponseEntity<?> response = travelService.getCabeName(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in cabe name : "+e);
@@ -135,10 +135,10 @@ public class TravelController {
 	
 	
 	@PostMapping("/cabe/travel-time/{cabeName}")
-	public ResponseEntity<?> getCabeTravelTime(@RequestBody TravelEntity travelEntity ,
+	public ResponseEntity<?> getCabeTravelTime(@RequestBody JournalEntity journalEntity ,
 			@PathVariable String cabeName){
 		try {
-			ResponseEntity<?> response = travelService.getCabeTravelTime(travelEntity, cabeName);
+			ResponseEntity<?> response = travelService.getCabeTravelTime(journalEntity, cabeName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in cabe travel time : "+e);
@@ -147,10 +147,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/cabe/ticket/{cabeName}")
-	public ResponseEntity<?> getCabeTickets(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getCabeTickets(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String cabeName){
 		try {
-			ResponseEntity<?> response = travelService.getCabeTicket(travelEntity, cabeName);
+			ResponseEntity<?> response = travelService.getCabeTicket(journalEntity, cabeName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in cabe tickets : "+e);
@@ -159,9 +159,9 @@ public class TravelController {
 	}
 	
 	@PostMapping("/flight/name")
-	public ResponseEntity<?> getFlightName(@RequestBody TravelEntity travelEntity){
+	public ResponseEntity<?> getFlightName(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> response = travelService.getFlightName(travelEntity);
+			ResponseEntity<?> response = travelService.getFlightName(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in get flight name : "+e);
@@ -170,10 +170,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/flight/time/{flightName}")
-	public ResponseEntity<?> getFlightTime(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getFlightTime(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String flightName){
 		try {
-			ResponseEntity<?> response = travelService.getFlightTiming(travelEntity, flightName);
+			ResponseEntity<?> response = travelService.getFlightTiming(journalEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("error occured in flight time : "+e);
@@ -182,10 +182,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/flight/travel-time/{flightName}")
-	public ResponseEntity<?> getFlightTravelTime(@RequestBody TravelEntity travelEntity ,
+	public ResponseEntity<?> getFlightTravelTime(@RequestBody JournalEntity journalEntity ,
 			@PathVariable String flightName){
 		try {
-			ResponseEntity<?> response = travelService.getFlightTravelTime(travelEntity, flightName);
+			ResponseEntity<?> response = travelService.getFlightTravelTime(journalEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in flight travel time : "+e);
@@ -194,10 +194,10 @@ public class TravelController {
 	}
 	
 	@PostMapping("/flight/ticket/{flightName}")
-	public ResponseEntity<?> getFlightTickets(@RequestBody TravelEntity travelEntity , 
+	public ResponseEntity<?> getFlightTickets(@RequestBody JournalEntity journalEntity , 
 			@PathVariable String flightName){
 		try {
-			ResponseEntity<?> response = travelService.getFlightTicket(travelEntity, flightName);
+			ResponseEntity<?> response = travelService.getFlightTicket(journalEntity, flightName);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in flight tickets : "+e);
@@ -205,10 +205,10 @@ public class TravelController {
 		}
 	}
 	
-	@PostMapping("details")
-	public ResponseEntity<?> getDetails(@RequestBody TravelEntity travelEntity){
+	@PostMapping("/details")
+	public ResponseEntity<?> getDetails(@RequestBody JournalEntity journalEntity){
 		try {
-			List<JournalEntity> response = travelService.travelDetails(travelEntity);
+			List<TravelEntity> response = travelService.travelDetails(journalEntity);
 			return new ResponseEntity<>(response , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occurred in travel details: ", e);

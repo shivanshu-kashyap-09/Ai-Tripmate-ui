@@ -4,16 +4,24 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { FaArrowRight } from "react-icons/fa";
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from "../assets/logo.jpg";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setshowPassword] = useState(false);
   const navigate = useNavigate();
 
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  const togglePasswordVisibility = () => {
+    setshowPassword(!showPassword);
+  };
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -43,12 +51,28 @@ const LoginPage = () => {
     }
   };
 
+  const handleGoogleLogin = async (response) => {
+    const token = response.credential;
+    try {
+      const res = await axios.post(`${baseUrl}/auth/google`, { token });
+      if (res.status === 200) {
+        const { email, name, picture } = res.data;
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("loginEmail", email);
+        localStorage.setItem("loginUserName", name);
+        localStorage.setItem("userProfilePic", picture);
+        toast.success("Logged in with Google!");
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error("Google login failed.");
+    }
+  };
+
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
-      {/* Background Overlay */}
-      <div className="fixed inset-0 bg-[#F7F5F0] bg-opacity-60 backdrop-blur flex items-center justify-center">
-        {/* Login Modal */}
-        <div className="bg-[#F7F5F0] rounded-xl shadow-2xl p-8 w-[420px] relative">
+      <div className="fixed inset-0 bg-gray-100 flex flex-col items-center justify-center p-6">
+        <div className="bg-white rounded-lg shadow-2xl max-w-5xl w-full flex flex-col md:flex-row overflow-hidden relative">
           {/* Close Button */}
           <button
             onClick={() => navigate("/")}
@@ -57,72 +81,81 @@ const LoginPage = () => {
             ✖
           </button>
 
-          {/* Title */}
-          <h2 className="text-3xl text-center font-semibold text-[#0E2835]">Login</h2>
-          <div className="w-16 h-0.5 bg-[#D29B7F] mx-auto mt-2"></div>
+          {/* Left Side - Logo on Mobile */}
+          <div className="md:hidden flex justify-center bg-blue-50 p-4">
+            <img src={logo} alt="Logo" className="w-32 object-contain rounded-lg shadow-lg" />
+          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mt-4 bg-red-100 text-red-700 px-4 py-2 rounded text-sm text-center">
-              {error}
+          {/* Left Side - Login Form */}
+          <div className="md:w-1/2 p-8 flex flex-col justify-center">
+            <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">
+              <span className="text-blue-800">AI TripMate</span> Login
+            </h2>
+
+            {error && <p className="text-red-500 text-center text-sm mb-2">{error}</p>}
+
+            <div className="space-y-5">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email or Username"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="border border-gray-300 p-3 rounded-lg w-full pr-12 focus:ring-2 focus:ring-blue-500"
+                />
+                <span
+                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
+              <button
+                onClick={handleLogin}
+                className={`bg-blue-600 text-white py-3 rounded-lg w-full flex justify-center items-center gap-2 text-lg font-semibold hover:bg-blue-900 transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "LOGIN"}
+                <FaArrowRight />
+              </button>
+
+              {/* <div className="text-center">
+                <a href="/forgot-password" className="text-blue-600 hover:underline text-sm">
+                  Forgot login details?
+                </a>
+              </div> */}
+
+              <div className="text-center text-sm text-gray-600">
+                Need help? Email <span className="text-blue-600 font-medium">support@gmail.com</span>
+              </div>
+
+              <div className="mt-4 flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => toast.error("Google login failed.")}
+                />
+              </div>
+
+              <p className="text-center mt-2 text-sm">
+                Don't have an account?{" "}
+                <span className="text-blue-500 cursor-pointer" onClick={() => navigate("/signup")}>
+                  Sign up
+                </span>
+              </p>
             </div>
-          )}
-
-          {/* Input Fields */}
-          <div className="mt-6">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email or Username"
-              className="w-full p-3 border border-gray-300 rounded-full bg-[#F2F0EC] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
           </div>
 
-          <div className="mt-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-3 border border-gray-300 rounded-full bg-[#F2F0EC] text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
-          </div>
-
-          {/* Login Button */}
-          <button
-            onClick={handleLogin}
-            className={`w-full flex items-center justify-center gap-2 p-3 mt-6 text-white rounded-full text-lg font-semibold transition-all duration-300 ${
-              isLoading ? "bg-gray-400" : "bg-[#0E2835] hover:bg-[#09202A]"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? "Loading..." : "LOGIN"}
-            <FaArrowRight />
-          </button>
-
-          {/* Forgot Password */}
-          <div className="mt-4 text-center">
-            <a href="/forgot-password" className="text-[#D29B7F] hover:underline text-sm">
-              Forgot login details?
-            </a>
-          </div>
-
-          {/* Support Message */}
-          <div className="mt-4 text-center text-sm text-gray-600">
-            If you need any help with your account, please email <br />
-            <span className="text-[#D29B7F] font-medium">support@asw.com</span>
-          </div>
-
-          {/* Google Login */}
-          <div className="mt-6 flex justify-center">
-            <GoogleLogin
-              onSuccess={() => {
-                toast.success("Logged in with Google!");
-                navigate("/");
-              }}
-              onError={() => toast.error("Google login failed.")}
-            />
+          {/* Right Side - Logo */}
+          <div className="md:w-1/2 hidden md:flex items-center justify-center bg-blue-50">
+            <img src={logo} alt="Logo" className="w-3/4 object-contain rounded-lg shadow-lg" />
           </div>
         </div>
       </div>

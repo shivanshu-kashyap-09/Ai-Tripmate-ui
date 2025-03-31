@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Travel.entity.FeedbackEntity;
 import com.example.Travel.entity.PublicEntity;
 import com.example.Travel.service.PublicService;
 
@@ -95,5 +96,16 @@ public class PublicController {
 	        log.error("Error occurred in verification : "+e);
 	        return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
+	}
+	
+	@PostMapping("/feedback")
+	public ResponseEntity<?> feedbackSubmit(@RequestBody FeedbackEntity feedbackEntity){
+		try {
+			publicService.feedbackSubmit(feedbackEntity);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Error occured in feedback submit : "+e);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 }

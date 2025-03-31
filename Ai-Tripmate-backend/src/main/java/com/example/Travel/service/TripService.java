@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.Travel.controller.ImageController;
 import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.TripEntity;
-import com.example.Travel.repository.JournalRepo;
-import com.fasterxml.jackson.annotation.JsonFormat.Features;
+import com.example.Travel.repository.TripRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,16 +26,13 @@ public class TripService {
 	private FetchService fetchService;
 
 	@Autowired
-	private JournalRepo journalRepo;
-	
-	@Autowired
-	private ImageController imageController;
+	private TripRepo tripRepo;
 
-	public ResponseEntity<?> getLocation(TripEntity tripEntity) {
+	public ResponseEntity<?> getLocation(JournalEntity journalEntity) {
 		try {
-			String message = "List only the names of visiting places (one per line) in " + tripEntity.getCity()
-					+ " that can be visited in " + tripEntity.getDays() + " days within a budget of Rs "
-					+ tripEntity.getBudget() + " for " + tripEntity.getPerson()
+			String message = "List only the names of visiting places (one per line) in " + journalEntity.getCity()
+					+ " that can be visited in " + journalEntity.getDays() + " days within a budget of Rs "
+					+ journalEntity.getBudget() + " for " + journalEntity.getPerson()
 					+ " persons. No descriptions, no costs, just place names.";
 			ResponseEntity<String> response = (ResponseEntity<String>) fetchService.get(message);
 			if (response == null || response.getBody() == null || response.getBody().trim().isEmpty()) {
@@ -120,25 +115,26 @@ public class TripService {
 		}
 	}
 
-	public List<JournalEntity> getDetails(TripEntity tripEntity) {
+	public List<TripEntity> getDetails(JournalEntity journalEntity) {
 		try {
-			String message = "List only the names of visiting places (one per line) in " + tripEntity.getCity()
-					+ " that can be visited in " + tripEntity.getDays() + " days within a budget of Rs "
-					+ tripEntity.getBudget() + " for " + tripEntity.getPerson()
-					+ " persons. No descriptions, no costs, just place names.";
+			String message = "List the names of visiting places in " + journalEntity.getCity() +
+	                 " that can be explored in " + journalEntity.getDays() + " days within a budget of Rs " +
+	                 journalEntity.getBudget() + " for " + journalEntity.getPerson() + 
+	                 " persons. Provide only the place names in a numbered list (e.g., 1. Place Name, City Name). " +
+	                 "No descriptions, no costs, no extra text.";
 			String response = fetchService.getData(message);
 			List<String> locationNames = fetchService.extractToList(response);
 
-			List<JournalEntity> existingLocations = journalRepo.findByExploreNameIn(locationNames);
-			Map<String, JournalEntity> locationMap = existingLocations.stream()
-					.collect(Collectors.toMap(JournalEntity::getExploreName, l -> l));
+			List<TripEntity> existingLocations = tripRepo.findByLocationName(locationNames);
+			Map<String, TripEntity> locationMap = existingLocations.stream()
+					.collect(Collectors.toMap(TripEntity::getLocationName, l -> l));
 
-			List<CompletableFuture<JournalEntity>> futures = locationNames.stream()
+			List<CompletableFuture<TripEntity>> futures = locationNames.stream()
 					.map(locationName -> CompletableFuture.supplyAsync(() -> {
 						if (locationMap.containsKey(locationName)) {
-							return validateAndUpdateLocationData(locationMap.get(locationName), tripEntity.getBudget());
+							return validateAndUpdateLocationData(locationMap.get(locationName), journalEntity.getBudget());
 						}
-						return fetchAndSaveLocationData(locationName, tripEntity.getBudget());
+						return fetchAndSaveLocationData(locationName, journalEntity.getBudget());
 					})).collect(Collectors.toList());
 
 			return futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
@@ -148,52 +144,63 @@ public class TripService {
 		}
 	}
 
-	private JournalEntity validateAndUpdateLocationData(JournalEntity locationData, String price) {
+	private TripEntity validateAndUpdateLocationData(TripEntity locationData, String price) {
 		boolean needsUpdate = false;
-		CompletableFuture<String> descFuture = null, priceFuture = null, ratingFuture = null , imageFuture = null;
+		CompletableFuture<String> descFuture = null, priceFuture = null, ratingFuture = null , imageFuture = null , visitTimeFuture = null;
 
-		if (locationData.getDescription() == null || locationData.getDescription().trim().isEmpty()) {
+		if (locationData.getLocationDescription() == null || locationData.getLocationDescription().trim().isEmpty()) {
 			needsUpdate = true;
 			descFuture = CompletableFuture.supplyAsync(() -> fetchService
-					.getData("Provide a concise 20 words description of " + locationData.getExploreName()
+					.getData("Provide a concise 20 words description of " + locationData.getLocationName()
 							+ ". No extra text, no introductions, just the main details."));
 		}
-		if (locationData.getPriceRange() == null || locationData.getPriceRange().trim().isEmpty()) {
+		if (locationData.getLocationPrice() == null || locationData.getLocationPrice().trim().isEmpty()) {
 			needsUpdate = true;
 			priceFuture = CompletableFuture.supplyAsync(() -> fetchService
-					.getData("Provide only the estimated budget required to visit " + locationData.getExploreName()
+					.getData("Provide only the estimated budget required to visit " + locationData.getLocationName()
 							+ ". No descriptions, no breakdown, just the total amount in INR."));
 		}
-		if (locationData.getRating() == null || locationData.getRating().trim().isEmpty()) {
+		if (locationData.getLocationRating() == null || locationData.getLocationRating().trim().isEmpty()) {
 			needsUpdate = true;
 			ratingFuture = CompletableFuture.supplyAsync(() -> fetchService
-					.getData("Provide only the Google review rating of " + locationData.getExploreName()
+					.getData("Provide only the Google review rating of " + locationData.getLocationName()
 							+ " place. No extra text, no descriptions, just the rating value."));
 		}
 		
-		if(locationData.getImage() == null || locationData.getImage().trim().isEmpty()) {
+		if(locationData.getLocationImage() == null || locationData.getLocationImage().trim().isEmpty()) {
 			needsUpdate = true;
-			imageFuture = CompletableFuture.supplyAsync(() -> imageController.searchImages(locationData.getExploreName()));
+			imageFuture = CompletableFuture.supplyAsync(() -> fetchService.searchImages(locationData.getLocationName()));
+		}
+		
+		if(locationData.getLocationVisitTime() == null || locationData.getLocationVisitTime().trim().isEmpty()) {
+			needsUpdate = true;
+			visitTimeFuture = CompletableFuture.supplyAsync(() -> fetchService.getData(
+				    "Provide the average time required to visit " + locationData.getLocationName() +
+				    ". Give only the duration in hours or minutes (e.g., '2 hours' or '45 minutes'). No extra text."
+				));
+
 		}
 
 		if (needsUpdate) {
 			if (descFuture != null)
-				locationData.setDescription(descFuture.join());
+				locationData.setLocationDescription(descFuture.join());
 			if (priceFuture != null)
-				locationData.setPriceRange(priceFuture.join());
+				locationData.setLocationPrice(priceFuture.join());
 			if (ratingFuture != null)
-				locationData.setRating(ratingFuture.join());
+				locationData.setLocationRating(ratingFuture.join());
 			if(imageFuture != null)
-				locationData.setImage(imageFuture.join());
+				locationData.setLocationImage(imageFuture.join());
+			if(visitTimeFuture != null)
+				locationData.setLocationVisitTime(visitTimeFuture.join());
 
-			journalRepo.save(locationData);
+			tripRepo.save(locationData);
 		}
 		return locationData;
 	}
 	
-	private JournalEntity fetchAndSaveLocationData(String locationName , String price) {
-		JournalEntity newJournalEntity = new JournalEntity();
-	    newJournalEntity.setExploreName(locationName);
+	private TripEntity fetchAndSaveLocationData(String locationName , String price) {
+		TripEntity newTripEntity = new TripEntity();
+		newTripEntity.setLocationName(locationName);
 	    
 	    CompletableFuture<String> descFuture = CompletableFuture.supplyAsync(() -> fetchService
 				.getData("Provide a concise 20 words description of " + locationName
@@ -207,15 +214,19 @@ public class TripService {
 				.getData("Provide only the Google review rating of " + locationName
 				+ " place. No extra text, no descriptions, just the rating value."));
 	    
-	   CompletableFuture<String> imageFuture = CompletableFuture.supplyAsync(() -> imageController.searchImages(locationName));
+	   CompletableFuture<String> imageFuture = CompletableFuture.supplyAsync(() -> fetchService.searchImages(locationName));
+	   
+	   CompletableFuture<String> visitTimeFuture = CompletableFuture.supplyAsync(() -> fetchService.getData(
+			   "Provide the average time required to visit " + locationName +
+			    ". Give only the duration in hours or minutes (e.g., '2 hours' or '45 minutes'). No extra text."));
 	    
-	    newJournalEntity.setDescription(descFuture.join());
-	    newJournalEntity.setPriceRange(priceFuture.join());
-	    newJournalEntity.setRating(ratingFuture.join());
-	    newJournalEntity.setImage(imageFuture.join());
-	    
-	    journalRepo.save(newJournalEntity);
-	    return newJournalEntity;
+	   newTripEntity.setLocationDescription(descFuture.join());
+	   newTripEntity.setLocationPrice(priceFuture.join());
+	   newTripEntity.setLocationRating(ratingFuture.join());
+	   newTripEntity.setLocationImage(imageFuture.join());
+	   newTripEntity.setLocationVisitTime(visitTimeFuture.join());
+	    tripRepo.save(newTripEntity);
+	    return newTripEntity;
 	}
 
 }

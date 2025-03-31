@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ServiceCard = ({ title, images, description, showBooking, serviceName }) => {
+const ServiceCard = ({ title, images, description, showBooking, serviceName }) => { //props
   const [location, setLocation] = useState("");
   const [budget, setBudget] = useState("");
   const [error, setError] = useState("");

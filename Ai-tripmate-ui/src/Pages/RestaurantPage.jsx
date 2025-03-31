@@ -33,27 +33,6 @@ function RestaurantService() {
     fetchDetails();
   }, [userLocation, userBudget]);
 
-  // useEffect(() => {
-  //   const fetchImages = async () => {
-  //     try {
-  //       const imagesArray = [];
-  //       for (let i = 0; i < restaurantName.length; i++) {
-  //         const response = await axios.get(`${baseUrl}/ai/image-search?query=${restaurantName[i]}" "${userLocation}`);
-  //         if (response.status === 200 && response.data.length) {
-  //           imagesArray.push(response.data);
-  //         } else {
-  //           imagesArray.push([logo2, logo2, logo2]);
-  //         }
-  //       }
-  //       setRestaurantImage(imagesArray);
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error("Error!!");
-  //     }
-  //   }
-  //   fetchImages();
-  // }, [restaurantName]);
-
   return (
     <div>
       <div className="px-6">
@@ -63,24 +42,24 @@ function RestaurantService() {
           restaurantDetails.map((restaurnatDetail, index) => (
             <div key={index}>
               <ServiceDetailCard
-                title={restaurnatDetail.exploreName || "restaurant"}
-                images={restaurnatDetail.image}
-                description={restaurnatDetail.description || "No description available"}
+                title={restaurnatDetail.restaurantName || "restaurant"}
+                images={restaurnatDetail.restaurantImage || restaurant}
+                description={restaurnatDetail.restaurantDescription || "No description available"}
                 location={userLocation}
-                mapLocation={`${restaurnatDetail.exploreName} ${userLocation}`}
-                price={restaurnatDetail.priceRange || "No price range available"}
-                rating={restaurnatDetail.rating || "No Rating available."}
+                mapLocation={`${restaurnatDetail.restaurantName} ${userLocation}`}
+                price={restaurnatDetail.restaurantPrice || "No price range available"}
+                rating={restaurnatDetail.restaurantRating || "No Rating available."}
               />
             </div>
           ))
         ) : (
           <ServiceDetailCard title={"restaurant"}
-          images={restaurant}
-          description={"No description available"}
-          location={userLocation}
-          mapLocation={userLocation}
-          price={"No price range available"}
-          rating={"No Rating available."} />
+            images={restaurant}
+            description={"No description available"}
+            location={userLocation}
+            mapLocation={userLocation}
+            price={"No price range available"}
+            rating={"No Rating available."} />
         )};
       </div>
     </div>

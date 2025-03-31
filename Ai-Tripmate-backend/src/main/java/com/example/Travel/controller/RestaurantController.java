@@ -30,9 +30,9 @@ public class RestaurantController {
 	private RestaurantService restaurantService;
 	
 	@PostMapping("/name")
-	public ResponseEntity<?> getName(@RequestBody RestaurantEntity restaurantEntity){
+	public ResponseEntity<?> getName(@RequestBody JournalEntity journalEntity){
 		try {
-			ResponseEntity<?> resturant = restaurantService.getName(restaurantEntity);
+			ResponseEntity<?> resturant = restaurantService.getName(journalEntity);
 			return new ResponseEntity<>(resturant , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in restaurant name : "+e);
@@ -74,9 +74,9 @@ public class RestaurantController {
 	}
 	
 	@PostMapping("/details")
-	public ResponseEntity<?> getDetails(@RequestBody RestaurantEntity restaurantEntity) {
+	public ResponseEntity<?> getDetails(@RequestBody JournalEntity JournalEntity) {
 		try {
-			List<JournalEntity> response = restaurantService.getDetails(restaurantEntity);
+			List<RestaurantEntity> response = restaurantService.getDetails(JournalEntity);
 			if(response != null) {
 				return new ResponseEntity<>(response , HttpStatus.OK);
 			}

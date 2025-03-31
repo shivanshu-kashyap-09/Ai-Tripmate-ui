@@ -11,10 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.Travel.controller.ImageController;
 import com.example.Travel.entity.JournalEntity;
 import com.example.Travel.entity.RestaurantEntity;
-import com.example.Travel.repository.JournalRepo;
+import com.example.Travel.repository.RestaurantRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,15 +25,12 @@ public class RestaurantService {
 	private FetchService fetchService;
 
 	@Autowired
-	private JournalRepo journalRepo;
+	private RestaurantRepo restaurantRepo;
 
-	@Autowired
-	private ImageController imageController;
-
-	public ResponseEntity<?> getName(RestaurantEntity restaurantEntity) {
+	public ResponseEntity<?> getName(JournalEntity journalEntity) {
 		try {
-			String city = restaurantEntity.getCity();
-			String price = restaurantEntity.getPrice();
+			String city = journalEntity.getCity();
+			String price = journalEntity.getBudget();
 			String message = "10 restaurant in " + city + " under " + price + " provide only restaurant name.";
 			ResponseEntity<String> response = (ResponseEntity<String>) fetchService.get(message);
 			List<String> restaurantNames = fetchService.extractToList(response.getBody());
@@ -84,20 +80,23 @@ public class RestaurantService {
 		}
 	}
 
-	public List<JournalEntity> getDetails(RestaurantEntity restaurantEntity) {
+	public List<RestaurantEntity> getDetails(JournalEntity journalEntity) {
 		try {
-			String city = restaurantEntity.getCity();
-			String price = restaurantEntity.getPrice();
-			String message = "10 restaurant in " + city + " under " + price + " provide only restaurant name.";
+			String city = journalEntity.getCity();
+			String price = journalEntity.getBudget();
+			String message = "List exactly 10 resturant located in " + city + 
+                    " within a budget of " + price + 
+                    ". Provide only resturant names in a numbered list (e.g., 1. resturant XYZ city Name). " +
+                    "Ensure all resturant are in " + city + " only.";
 
 			String response = fetchService.getData(message);
 			List<String> restaurantNames = fetchService.extractToList(response);
 
-			List<JournalEntity> existingRestaurantNames = journalRepo.findByExploreNameIn(restaurantNames);
-			Map<String, JournalEntity> restaurantMap = existingRestaurantNames.stream().collect(
-					Collectors.toMap(JournalEntity::getExploreName, r -> r, (existing, duplicate) -> existing));
+			List<RestaurantEntity> existingRestaurantNames = restaurantRepo.findByRestaurantName(restaurantNames);
+			Map<String, RestaurantEntity> restaurantMap = existingRestaurantNames.stream().collect(
+					Collectors.toMap(RestaurantEntity::getRestaurantName, r -> r, (existing, duplicate) -> existing));
 
-			List<CompletableFuture<JournalEntity>> futres = restaurantNames.stream()
+			List<CompletableFuture<RestaurantEntity>> futres = restaurantNames.stream()
 					.map(restaurantName -> CompletableFuture.supplyAsync(() -> {
 						if (restaurantMap.containsKey(restaurantName)) {
 							return validateAndUpdateRestaurantData(restaurantMap.get(restaurantName), price);
@@ -112,58 +111,58 @@ public class RestaurantService {
 		return null;
 	}
 
-	private JournalEntity validateAndUpdateRestaurantData(JournalEntity restaurantData, String price) {
+	private RestaurantEntity validateAndUpdateRestaurantData(RestaurantEntity restaurantData, String price) {
 		boolean needsUpdate = false;
 
 		CompletableFuture<String> descFuture = null, priceFuture = null, ratingFuture = null, imageFuture = null;
 		;
 
-		if (restaurantData.getDescription() == null || restaurantData.getDescription().trim().isEmpty()) {
+		if (restaurantData.getRestaurantDescription() == null || restaurantData.getRestaurantDescription().trim().isEmpty()) {
 			needsUpdate = true;
 			descFuture = CompletableFuture.supplyAsync(() -> fetchService
-					.getData("Provide a concise 20 words description of " + restaurantData.getExploreName()
+					.getData("Provide a concise 20 words description of " + restaurantData.getRestaurantName()
 							+ ". No extra text, no introductions, just the main details."));
 		}
 
-		if (restaurantData.getPriceRange() == null || restaurantData.getPriceRange().trim().isEmpty()) {
+		if (restaurantData.getRestaurantPrice() == null || restaurantData.getRestaurantPrice().trim().isEmpty()) {
 			needsUpdate = true;
 			priceFuture = CompletableFuture.supplyAsync(() -> fetchService
-					.getData("provide me only average price range of " + restaurantData.getExploreName()
+					.getData("provide me only average price range of " + restaurantData.getRestaurantName()
 							+ " restaurant under" + price + " not provide any other text."));
 		}
 
-		if (restaurantData.getRating() == null || restaurantData.getRating().trim().isEmpty()) {
+		if (restaurantData.getRestaurantRating() == null || restaurantData.getRestaurantRating().trim().isEmpty()) {
 			needsUpdate = true;
 			ratingFuture = CompletableFuture
 					.supplyAsync(() -> fetchService.getData("only provide google review rating of "
-							+ restaurantData.getExploreName() + " restaurant not provide any other text."));
+							+ restaurantData.getRestaurantName() + " restaurant not provide any other text."));
 		}
 
-		if (restaurantData.getImage() == null || restaurantData.getImage().trim().isEmpty()) {
+		if (restaurantData.getRestaurantImage() == null || restaurantData.getRestaurantImage().trim().isEmpty()) {
 			needsUpdate = true;
 			imageFuture = CompletableFuture
-					.supplyAsync(() -> imageController.searchImages(restaurantData.getExploreName()));
+					.supplyAsync(() -> fetchService.searchImages(restaurantData.getRestaurantName()));
 		}
 
 		if (needsUpdate) {
 			if (descFuture != null)
-				restaurantData.setDescription(descFuture.join());
+				restaurantData.setRestaurantDescription(descFuture.join());
 			if (priceFuture != null)
-				restaurantData.setPriceRange(priceFuture.join());
+				restaurantData.setRestaurantPrice(priceFuture.join());
 			if (ratingFuture != null)
-				restaurantData.setRating(ratingFuture.join());
+				restaurantData.setRestaurantRating(ratingFuture.join());
 			if (imageFuture != null)
-				restaurantData.setImage(imageFuture.join());
+				restaurantData.setRestaurantImage(imageFuture.join());
 
-			journalRepo.save(restaurantData);
+			restaurantRepo.save(restaurantData);
 		}
 
 		return restaurantData;
 	}
 
-	private JournalEntity fetchAndSaveRestaurantData(String restaurantName, String price) {
-		JournalEntity newJournalEntity = new JournalEntity();
-		newJournalEntity.setExploreName(restaurantName);
+	private RestaurantEntity fetchAndSaveRestaurantData(String restaurantName, String price) {
+		RestaurantEntity newRestaurantEntity = new RestaurantEntity();
+		newRestaurantEntity.setRestaurantName(restaurantName);
 
 		// Execute all API calls in parallel
 		CompletableFuture<String> descFuture = CompletableFuture
@@ -177,15 +176,15 @@ public class RestaurantService {
 		CompletableFuture<String> ratingFuture = CompletableFuture.supplyAsync(() -> fetchService.getData(
 				"only provide google review rating of " + restaurantName + " restaurant not provide any other text."));
 
-		CompletableFuture<String> imageFuture = CompletableFuture.supplyAsync(() -> imageController.searchImages(restaurantName));
+		CompletableFuture<String> imageFuture = CompletableFuture.supplyAsync(() -> fetchService.searchImages(restaurantName));
 		
 		// Wait for all data to be fetched
-		newJournalEntity.setDescription(descFuture.join());
-		newJournalEntity.setPriceRange(priceFuture.join());
-		newJournalEntity.setRating(ratingFuture.join());
-		newJournalEntity.setImage(imageFuture.join());
+		newRestaurantEntity.setRestaurantDescription(descFuture.join());
+		newRestaurantEntity.setRestaurantPrice(priceFuture.join());
+		newRestaurantEntity.setRestaurantRating(ratingFuture.join());
+		newRestaurantEntity.setRestaurantImage(imageFuture.join());
 
-		journalRepo.save(newJournalEntity);
-		return newJournalEntity;
+		restaurantRepo.save(newRestaurantEntity);
+		return newRestaurantEntity;
 	}
 }

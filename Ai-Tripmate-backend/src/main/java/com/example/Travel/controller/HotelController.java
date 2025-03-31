@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Travel.entity.HotelEntity;
 import com.example.Travel.entity.JournalEntity;
+import com.example.Travel.service.FetchService;
 import com.example.Travel.service.HotelService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +30,11 @@ public class HotelController {
 	@Autowired
 	private HotelService hotelService;
 	
+	
 	@PostMapping("/name")
-	public ResponseEntity<?> getName(@RequestBody HotelEntity hotelEntity) {
+	public ResponseEntity<?> getName(@RequestBody JournalEntity journalEntity) {
 		try {
-			ResponseEntity<?> hotelName = hotelService.getHotelsName(hotelEntity);
+			ResponseEntity<?> hotelName = hotelService.getHotelsName(journalEntity);
 			return new ResponseEntity<>(hotelName , HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Error occured in hotel names : "+e);
@@ -74,10 +76,10 @@ public class HotelController {
 	}
 	
 	@PostMapping("/details")
-	public ResponseEntity<?> getDetails(@RequestBody HotelEntity hotelEntity) {
+	public ResponseEntity<?> getDetails(@RequestBody JournalEntity journalEntity) {
 		try {
 			
-			List<JournalEntity> response = hotelService.getDetails(hotelEntity);
+			List<HotelEntity> response = hotelService.getDetails(journalEntity);
 			if(response != null) {
 				return new ResponseEntity<>(response , HttpStatus.OK);
 			}
