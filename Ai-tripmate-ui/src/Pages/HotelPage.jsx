@@ -36,7 +36,7 @@ function HotelPage() {
   return (
     <div>
       <div className="px-6">
-        <h1 className="text-center text-3xl font-bold my-6 text-blue-500">HOTEL SERVICE</h1>
+        <h1 className="text-center text-3xl font-bold my-4 text-blue-500">HOTEL SERVICE</h1>
 
         {hotelDetails.length > 0 ? (
 
