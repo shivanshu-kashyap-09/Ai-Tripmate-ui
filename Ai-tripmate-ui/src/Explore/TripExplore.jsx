@@ -3,7 +3,7 @@ import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa"
 import { BiRupee } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import TripPage from "../Pages/Trippage";
-import logo from "../assets/tripBg.jpg";
+import logo from "../assets/tripPageImg.png";
 
 const TripExplore = () => {
     const [selectedOption, setSelectedOption] = useState("Trip");
@@ -28,11 +28,11 @@ const TripExplore = () => {
         <>
             {/* Background Section */}
             <div
-                className="relative w-full h-auto bg-cover bg-center text-white flex flex-col items-center justify-center px-4 pb-10 sm:pb-16"
+                className="relative w-full h-[80vh] bg-cover bg-center text-white flex flex-col items-center justify-center px-4 pb-10 sm:pb-16"
                 style={{ backgroundImage: `url(${logo})` }}
             >
                 {/* Title */}
-                <div className="text-center mt-6">
+                <div className="text-center mt-10">
                     <h1 className="text-2xl sm:text-4xl font-bold text-black">
                         🏝️ Your journey, your story—start exploring today!
                     </h1>
@@ -42,11 +42,11 @@ const TripExplore = () => {
                 </div>
 
                 {/* Options Section */}
-                <div className="relative z-30 flex flex-wrap sm:flex-nowrap lg:flex-row justify-center bg-white rounded-lg shadow-lg p-2 gap-2 sm:gap-4 text-black mt-4 sm:mt-6 w-auto max-w-md lg:max-w-full overflow-x-auto">
+                <div className="relative flex flex-wrap sm:flex-nowrap lg:flex-row justify-center bg-white rounded-lg  p-2 gap-2 sm:gap-4 text-black mt-4 sm:mt-6 w-auto max-w-md lg:max-w-full overflow-x-auto h-[12%]">
                     {["FullTrip", "Hotel", "Restaurant", "Trip", "Travel"].map((option) => (
                         <button
                             key={option}
-                            className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium ${
+                            className={`px-3 sm:px-4 py-0 rounded-md text-sm font-medium ${
                                 selectedOption === option
                                     ? "bg-blue-600 text-white"
                                     : "text-gray-700 hover:bg-gray-200"
@@ -59,7 +59,7 @@ const TripExplore = () => {
                 </div>
 
                 {/* Search Bar */}
-                <div className="bg-white rounded-lg shadow-lg p-4 flex flex-wrap items-center gap-2 sm:gap-4 w-[95%] sm:w-[80%] max-w-4xl text-black mt-4">
+                <div className="bg-white rounded-lg shadow-lg  flex flex-wrap items-center gap-2 sm:gap-4 w-[95%] sm:w-[80%] max-w-4xl text-black mt-1 h-[15%] pb-2 pt-2 pl-4 pr-4">
                     {/* Destination */}
                     <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
                         <FaMapMarkerAlt className="text-gray-500 mr-2" />

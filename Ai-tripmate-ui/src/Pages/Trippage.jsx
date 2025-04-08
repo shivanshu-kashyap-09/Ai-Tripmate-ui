@@ -36,7 +36,7 @@ function TripPage() {
   return (
     <div>
       <div className="px-6">
-        <h1 className="text-center text-3xl font-bold my-6 text-blue-500">
+        <h1 className="text-center text-3xl font-bold my-4 text-blue-500">
           TRIP SERVICE</h1>
         {tripDetails.length > 0 ? (
 

@@ -22,4 +22,9 @@ public class AuthUser {
         this.name = name;
         this.picture = picture;
     }
+
+	public void setName(String name2) {
+		// TODO Auto-generated method stub
+		
+	}
 }
