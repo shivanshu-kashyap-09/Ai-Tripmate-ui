@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import HotelPage from './HotelPage'
 import RestaurantPage from './RestaurantPage'
-import TripPage from './Trippage'
+import TripPage from './TripPage'
 import TravelPage from './TravelPage'
 
 function FullTrip() {

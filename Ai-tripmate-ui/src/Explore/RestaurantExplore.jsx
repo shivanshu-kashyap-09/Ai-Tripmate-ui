@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -34,7 +34,7 @@ const RestaurantExplore = () => {
         <>
             {/*Background Image Section */}
             <div
-                className="relative w-full h-[400px] bg-cover bg-center text-white flex flex-col items-center justify-center px-4"
+                className="relative w-full h-[80vh] bg-cover bg-center text-white flex flex-col items-center justify-center px-4"
                 style={{ backgroundImage: `url(${logo})` }}
             >
                 <div className="text-center">
@@ -44,11 +44,11 @@ const RestaurantExplore = () => {
                     <p className="text-lg mt-2 text-black">🌿 Fresh, Flavorful, and Full of Life!</p>
                 </div>
 
-                <div className="relative z-30 flex flex-wrap sm:flex-wrap lg:flex-row justify-center bg-white rounded-lg shadow-lg p-2 gap-2 sm:gap-4 text-black mt-6 sm:mt-8 w-full lg:w-auto max-w-md lg:max-w-full overflow-x-auto">
+                <div className="relative  flex flex-wrap sm:flex-wrap lg:flex-row justify-center bg-white rounded-lg  p-2 gap-2 sm:gap-4 text-black mt-9 sm:mt-8 w-full lg:w-auto max-w-md lg:max-w-full overflow-x-auto">
                     {["FullTrip", "Hotel", "Restaurant", "Trip", "Travel"].map((option) => (
                         <button
                             key={option}
-                            className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium ${selectedOption === option
+                            className={`px-3 sm:px-4 py-1 rounded-md text-sm font-medium ${selectedOption === option
                                     ? "bg-blue-600 text-white"
                                     : "text-gray-700 hover:bg-gray-200"
                                 }`}
@@ -61,7 +61,7 @@ const RestaurantExplore = () => {
 
 
                 {/*Search Bar*/}
-                <div className="relative z-20 mt-6 sm:mt-10 bg-white rounded-lg shadow-lg p-4 flex flex-col sm:flex-row gap-4 w-[90%] sm:w-[80%] max-w-4xl text-black">
+                <div className="relative mt-1 bg-white rounded-lg shadow-lg  flex flex-col sm:flex-row gap-4 w-[80%] sm:w-[60%] max-w-4xl text-black pr-4 pl-4 pt-2 pb-2 ">
 
                     {/* 🔹 Destination Input */}
                     <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
@@ -73,6 +73,7 @@ const RestaurantExplore = () => {
                             className="outline-none w-full"
                             placeholder="Enter destination"
                         />
+                        <p>Location</p>
                     </div>
 
                     {/* 🔹 Budget Dropdown */}
@@ -86,7 +87,7 @@ const RestaurantExplore = () => {
                             onChange={(e) => setBudget(e.target.value)}
                             className="outline-none w-full bg-white cursor-text"
                         />
-
+                        <p>Budget</p>
                         {/* Dropdown Arrow */}
                         <IoIosArrowDown
                             className="text-gray-500 ml-2 cursor-pointer"

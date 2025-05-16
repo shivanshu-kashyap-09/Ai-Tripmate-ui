@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ServiceDetailCard from "../card-details/ServiceDetailCard";
 import { useLocation } from "react-router-dom";
 import hotel from "../assets/hotel.png";
@@ -26,7 +26,7 @@ function HotelPage() {
         );
         if (response.status === 200)
           setHotelDetails(response.data);
-      } catch (error) {
+      } catch (e) {
         toast.error("Error occured in fetch details : ", e);
       }
     }

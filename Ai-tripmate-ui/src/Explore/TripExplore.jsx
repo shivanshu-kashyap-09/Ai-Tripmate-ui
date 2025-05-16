@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import TripPage from "../Pages/Trippage";
+import TripPage from "../Pages/TripPage";
 import logo from "../assets/tripPageImg.png";
 
 const TripExplore = () => {
@@ -46,11 +46,10 @@ const TripExplore = () => {
                     {["FullTrip", "Hotel", "Restaurant", "Trip", "Travel"].map((option) => (
                         <button
                             key={option}
-                            className={`px-3 sm:px-4 py-0 rounded-md text-sm font-medium ${
-                                selectedOption === option
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-700 hover:bg-gray-200"
-                            }`}
+                            className={`px-3 sm:px-4 py-1 rounded-md text-sm font-medium ${selectedOption === option
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-700 hover:bg-gray-200"
+                                }`}
                             onClick={() => handleOptionChange(option)}
                         >
                             {option}
@@ -70,6 +69,7 @@ const TripExplore = () => {
                             className="outline-none w-full text-sm"
                             placeholder="Enter Destination"
                         />
+                        <p className="text-[10px] font-semibold">Destination</p>
                     </div>
 
                     {/* Persons */}
@@ -83,6 +83,7 @@ const TripExplore = () => {
                             max="100"
                             className="outline-none w-full text-sm"
                         />
+                        <p className="text-[12px] font-semibold">Persons</p>
                     </div>
 
                     {/* Days */}
@@ -96,6 +97,7 @@ const TripExplore = () => {
                             max="100"
                             className="outline-none w-full text-sm"
                         />
+                        <p className="text-[12px] font-semibold">Days</p>
                     </div>
 
                     {/* Budget */}
@@ -107,6 +109,7 @@ const TripExplore = () => {
                             onChange={(e) => setBudget(e.target.value)}
                             className="outline-none w-full text-sm"
                         />
+                        <p className="text-[12px] font-semibold">Budget</p>
                     </div>
 
                     {/* Search Button */}

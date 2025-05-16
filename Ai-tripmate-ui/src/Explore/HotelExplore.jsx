@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -37,8 +37,8 @@ const HotelExplore = () => {
                 style={{ backgroundImage: `url(${logo})` }}
             >
                 <div className="text-center">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-8 text-white ">
-                    CHECK IN TO COMFORT, CHECK OUT THE VIEWS
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-white ">
+                        CHECK IN TO COMFORT, CHECK OUT THE VIEWS
                     </h1>
                 </div>
 
@@ -48,8 +48,8 @@ const HotelExplore = () => {
                         <button
                             key={option}
                             className={`px-3 sm:px-4 py-1 rounded-md text-sm font-medium ${selectedOption === option
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-700 hover:bg-gray-200"
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-700 hover:bg-gray-200"
                                 }`}
                             onClick={() => handleOptionChange(option)}
                         >
@@ -59,19 +59,20 @@ const HotelExplore = () => {
                 </div>
 
 
-                {/* Search Bar - Tight margin below options */}
-    <div className="relative mt-1 bg-white rounded-lg shadow-lg  flex flex-col sm:flex-row gap-4 w-[80%] sm:w-[60%] max-w-4xl text-black pr-4 pl-4 pt-2 pb-2 ">
-        {/* Destination Input */}
-        <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
-            <FaMapMarkerAlt className="text-gray-500 mr-2" />
-            <input
-                type="text"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="outline-none w-full"
-                placeholder="Enter destination"
-            />
-        </div>
+                {/* Search Bar*/}
+                <div className="relative mt-1 bg-white rounded-lg shadow-lg  flex flex-col sm:flex-row gap-4 w-[80%] sm:w-[60%] max-w-4xl text-black pr-4 pl-4 pt-2 pb-2 ">
+                    {/* Destination Input */}
+                    <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
+                        <FaMapMarkerAlt className="text-gray-500 mr-2" />
+                        <input
+                            type="text"
+                            value={destination}
+                            onChange={(e) => setDestination(e.target.value)}
+                            className="outline-none w-full"
+                            placeholder="Enter destination"
+                        />
+                        <p>Location</p>
+                    </div>
 
                     {/* Budget Dropdown */}
                     <div className="relative flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 w-full sm:w-auto">
@@ -84,7 +85,7 @@ const HotelExplore = () => {
                             onChange={(e) => setBudget(e.target.value)}
                             className="outline-none w-full bg-white cursor-text"
                         />
-
+                        <p>Budget</p>
                         {/* Dropdown Arrow */}
                         <IoIosArrowDown
                             className="text-gray-500 ml-2 cursor-pointer"

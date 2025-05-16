@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ServiceDetailCard from "../card-details/ServiceDetailCard";
@@ -26,7 +26,7 @@ function TripPage() {
         );
         if (response.status === 200)
           setTripDetails(response.data);
-      } catch (error) {
+      } catch (e) {
         toast.error("Error occured in fetch details : ", e);
       }
     }
