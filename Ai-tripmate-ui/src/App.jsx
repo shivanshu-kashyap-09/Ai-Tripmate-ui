@@ -1,12 +1,12 @@
-import React from "react";
+// import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./common-components/Layout";
 import HomePage from "./Pages/HomePage";
-import HotelPage from "./Pages/HotelPage";
-import RestaurantPage from "./Pages/RestaurantPage";
-import TravelPage from "./Pages/TravelPage";
-import TripPage from "./Pages/TripPage";
-import FullTripPage from "./Pages/FullTripPage";
+// import HotelPage from "./Pages/HotelPage";
+// import RestaurantPage from "./Pages/RestaurantPage";
+// import TravelPage from "./Pages/TravelPage";
+// import TripPage from "./Pages/TripPage";
+// import FullTripPage from "./Pages/FullTripPage";
 import LoginPage from "./Pages/LoginPage";
 import Signup from "./Pages/Signup";
 import GoogleLoginButton from "./Pages/GoogleLoginButton";
@@ -26,9 +26,9 @@ function App() {
         {/* Wrap all routes inside Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/about" element={<About/>} />
-          <Route path="/feedback" element={<Feedback/>} />
-          <Route path="/contact" element={<Footer/>} />
+          <Route path="/about" element={<About />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/contact" element={<Footer />} />
           <Route path="/fulltripexplore" element={<FullTripExplore />} />
           <Route path="/hotelexplore" element={<HotelExplore />} />
           <Route path="/restaurantexplore" element={<RestaurantExplore />} />

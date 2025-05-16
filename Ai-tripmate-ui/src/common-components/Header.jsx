@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import logo from "../assets/logo.jpg";
@@ -16,14 +16,13 @@ const Header = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  // Handle scrolling effect
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update user state when `localStorage` changes
   useEffect(() => {
     const updateUserInfo = () => {
       setUserName(localStorage.getItem("loginUserName"));
@@ -36,7 +35,6 @@ const Header = () => {
     return () => window.removeEventListener("storage", updateUserInfo);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -47,11 +45,10 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  // Logout function
+  
   const handleLogout = () => {
     localStorage.clear();
-    window.dispatchEvent(new Event("storage")); // Force state update
+    window.dispatchEvent(new Event("storage"));
     navigate("/");
   };
 
@@ -62,18 +59,15 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
-        {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img src={logo} alt="Logo" className="w-12 h-12 rounded-lg" />
           <span className="text-xl font-bold text-white">AI Tripmate</span>
         </Link>
 
-        {/* Mobile Menu Toggle */}
         <button className="md:hidden text-2xl text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        {/* Navigation Menu */}
         <nav
           className={`md:flex md:items-center absolute md:static top-16 left-0 w-full md:w-auto bg-black md:bg-transparent shadow-lg md:shadow-none p-4 md:p-0 transition-all duration-300 ${
             isMobileMenuOpen ? "block" : "hidden"
@@ -81,7 +75,6 @@ const Header = () => {
         >
           <Link to="/" className="block md:inline-block px-4 py-2 text-white hover:text-gray-300">Home</Link>
 
-          {/* Services Dropdown */}
           <div className="relative inline-block px-4 py-2">
             <button
               onClick={() => setIsServiceDropdownOpen(!isServiceDropdownOpen)}
@@ -90,7 +83,9 @@ const Header = () => {
               Services <FaChevronDown className="ml-2 text-sm" />
             </button>
             {isServiceDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg py-2 border border-gray-300">
+              <div 
+              ref={dropdownRef}
+              className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg py-2 border border-gray-300">
                 <Link to="/fulltripexplore" className="block px-4 py-2 hover:bg-gray-100">Full Trip</Link>
                 <Link to="/hotelexplore" className="block px-4 py-2 hover:bg-gray-100">Hotels</Link>
                 <Link to="/restaurantexplore" className="block px-4 py-2 hover:bg-gray-100">Restaurants</Link>
@@ -105,7 +100,6 @@ const Header = () => {
           <Link to="/contact" className="block md:inline-block px-4 py-2 text-white hover:text-gray-300">Contact</Link>
         </nav>
 
-        {/* Authentication & Profile Section */}
         {userName ? (
           <div className="relative ">
             <button onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)} className="flex items-center text-black">
@@ -124,7 +118,7 @@ const Header = () => {
                 <p className="px-4 py-2 text-sm text-gray-600">{userEmail}</p>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-center px-4 py-2 text-white hover:bg-red-500 bg-red-600 rounded-2xl"
+                  className="block w-[40%] h-[40px] text-center ml-[30%] px-2 py-2 text-white hover:bg-red-500 bg-red-600 rounded-2xl"
                 >
                   Logout
                 </button>
