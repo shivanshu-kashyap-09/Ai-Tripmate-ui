@@ -71,19 +71,21 @@ cd Ai-tripmate-ui
 ### Install Dependencies
 npm install
 
-### Setup Environment Variables(.env)
+# Setup Environment Variables(.env)
 VITE_GOOGLE_CLIENT_ID=CLIENT_ID
+
 VITE_BASE_URL=http://localhost:8080
 
-### Run Locally
+# Run Locally
 npm run dev
 
-## backend repo
+# backend repo
 ```bash
 git clone https://github.com/shivanshu-kashyap-09/Ai-Tripmate-Backend.git
 ```
-###Support / Contact
+#Support / Contact
 For help or feedback, reach out to:
+
 kashyapshivanshu63@gmail.com
 https://www.linkedin.com/in/shivanshu-kashyap-18b426244/
 
