@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import TravelDetailCard from '../card-details/TravelDetailCard';
 import { useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -27,7 +27,7 @@ function TravelPage() {
                 );
                 if (response.status === 200)
                     setTravelDetails(response.data);
-            } catch (error) {
+            } catch (e) {
                 toast.error("Error occured in fetch details : ", e);
             }
         }
