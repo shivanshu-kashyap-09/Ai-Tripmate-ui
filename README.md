@@ -36,10 +36,11 @@ Check out the live website here:
 
 ## 📁 Project Structure
 AI-TRIPMATE-UI/
-│
+
 ├── node_modules/
+
 ├── public/
-│
+
 ├── src/
 │   ├── assets/
 │   ├── card-details/
@@ -87,6 +88,7 @@ git clone https://github.com/shivanshu-kashyap-09/Ai-Tripmate-Backend.git
 For help or feedback, reach out to:
 
 kashyapshivanshu63@gmail.com
+
 https://www.linkedin.com/in/shivanshu-kashyap-18b426244/
 
 
