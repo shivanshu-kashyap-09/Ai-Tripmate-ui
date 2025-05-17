@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ServiceDetailCard from "../card-details/ServiceDetailCard";
 import { useLocation } from "react-router-dom";
-import trip from "../assets/trip.png";
+import trip from "../assets/Trip.png";
 
 function TripPage() {
   const location = useLocation();
