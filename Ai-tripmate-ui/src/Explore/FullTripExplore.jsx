@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import logo from "../assets/fullTripBg.jpg";
 import HotelPage from "../Pages/HotelPage";
 import RestaurantPage from "../Pages/RestaurantPage";
-import TripPage from "../Pages/TripPage";
+import TripPage from "../Pages/Trippage";
 import TravelPage from "../Pages/TravelPage";
 
 const FullTripExplore = () => {
