@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import TripPage from "../Pages/TripPage";
+import TripPage from "../Pages/Trippage";
 import logo from "../assets/tripPageImg.png";
 
 const TripExplore = () => {
