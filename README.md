@@ -35,26 +35,45 @@ Check out the live website here:
 ---
 
 ## 📁 Project Structure
-AI-TRIPMATE-UI/
+Ai-tripmate-ui/
+
 ├── node_modules/
+
 ├── public/
+
 ├── src/
 │   ├── assets/
+
 │   ├── card-details/
+
 │   ├── cards/
+
 │   ├── common-components/
+
 │   ├── Explore/
+
 │   ├── Pages/
+
 │   ├── App.css
+
 │   ├── App.jsx
+
 │   ├── index.css
+
 │   ├── main.jsx
+
 ├── .gitignore
+
 ├── eslint.config.js
+
 ├── index.html
+
 ├── package-lock.json
+
 ├── package.json
+
 ├── README.md
+
 ├── vite.config.js
 
 ## 🛠️ Getting Started
