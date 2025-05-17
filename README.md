@@ -36,11 +36,8 @@ Check out the live website here:
 
 ## 📁 Project Structure
 AI-TRIPMATE-UI/
-
 ├── node_modules/
-
 ├── public/
-
 ├── src/
 │   ├── assets/
 │   ├── card-details/
@@ -52,7 +49,6 @@ AI-TRIPMATE-UI/
 │   ├── App.jsx
 │   ├── index.css
 │   ├── main.jsx
-│
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html
