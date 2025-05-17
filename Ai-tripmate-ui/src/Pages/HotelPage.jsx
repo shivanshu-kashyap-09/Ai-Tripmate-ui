@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ServiceDetailCard from "../card-details/ServiceDetailCard";
 import { useLocation } from "react-router-dom";
-import hotel from "../assets/hotel.png";
+import hotel from "../assets/Hotel.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 

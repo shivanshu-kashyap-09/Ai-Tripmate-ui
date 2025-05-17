@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ServiceDetailCard from '../card-details/ServiceDetailCard'
-import restaurant from '../assets/restaurant.jpg'
+import restaurant from '../assets/Restaurant.jpg'
 import axios from "axios"
 
 
