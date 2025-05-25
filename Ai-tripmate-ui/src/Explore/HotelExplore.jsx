@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { FaSearch, FaMapMarkerAlt } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -22,6 +22,8 @@ const HotelExplore = () => {
 
     const handleSearch = (event) => {
         event.preventDefault();
+        setDestination(destination);
+        setBudget(budget);
         navigate(`/hotelexplore?destination=${destination}&budget=${budget}`);
     };
 
@@ -29,7 +31,6 @@ const HotelExplore = () => {
         setSelectedOption(option);
         navigate(`/${option.toLowerCase()}explore`);
     };
-
     return (
         <>
             <div

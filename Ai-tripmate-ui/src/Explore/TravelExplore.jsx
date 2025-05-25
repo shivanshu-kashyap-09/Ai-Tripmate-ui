@@ -103,6 +103,7 @@ const TravelExplore = () => {
                       className="border px-2 rounded-md w-40"
                       defaultValue={destination.fromDes}
                       id="fromInput"
+                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
                   <div className="flex justify-between">
@@ -112,6 +113,7 @@ const TravelExplore = () => {
                       className="border px-2 rounded-md w-40"
                       defaultValue={destination.toDes}
                       id="toInput"
+                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
                   <button

@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { FaSearch, FaCalendarAlt, FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
-// import { BiRupee } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,16 +17,22 @@ const FullTripExplore = () => {
     const [dateRange, setDateRange] = useState({ checkIn: null, checkOut: null });
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [persons, setPersons] = useState("2 Persons · 5000 Budget");
+    const [numPersons, setNumPersons] = useState(2);
+    const [budget, setBudget] = useState(5000);
     const [showPersonDropdown, setShowPersonDropdown] = useState(false);
+    const [loading, setLoading] = useState(false);
     const locationPickerRef = useRef(null);
     const datePickerRef = useRef(null);
     const personBudgetRef = useRef(null);
     const navigate = useNavigate();
 
-    // const handleSearch = (event) => {
-    //     event.preventDefault();
-    //     navigate(`/fulltripexplore?from=${destination.fromDes}&to=${destination.toDes}&budget=${budget}&persons=${persons}&checkIn=${dateRange.checkIn}&checkOut=${dateRange.checkOut}`);
-    // };
+    const handleSearch = (event) => {
+        event.preventDefault();
+        setLoading(true);
+        navigate(
+            `/fulltripexplore?from=${destination.fromDes}&to=${destination.toDes}&budget=${budget}&persons=${numPersons}&checkIn=${dateRange.checkIn?.toISOString()}&checkOut=${dateRange.checkOut?.toISOString()}`
+        );
+    };
 
     const handleOptionChange = (option) => {
         setSelectedOption(option);
@@ -46,15 +51,17 @@ const FullTripExplore = () => {
                 setShowPersonDropdown(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const isSearchDisabled = !destination.fromDes || !destination.toDes || !dateRange.checkIn || !dateRange.checkOut;
+
     return (
         <>
             {/* Background Section */}
-            <div className="relative w-full h-[80vh] bg-cover bg-center text-white flex flex-col items-center justify-center px-4"
+            <div
+                className="relative w-full h-[80vh] bg-cover bg-center text-white flex flex-col items-center justify-center px-4"
                 style={{ backgroundImage: `url(${logo})` }}
             >
                 <div className="text-center">
@@ -66,7 +73,8 @@ const FullTripExplore = () => {
                     </p>
                 </div>
 
-                <div className="relative  flex flex-wrap sm:flex-wrap lg:flex-row justify-center bg-white rounded-lg  p-2 gap-2 sm:gap-4 text-black mt-9 sm:mt-8 w-full lg:w-auto max-w-md lg:max-w-full overflow-x-auto">
+                {/* Tabs */}
+                <div className="relative flex flex-wrap lg:flex-row justify-center bg-white rounded-lg p-2 gap-2 sm:gap-4 text-black mt-9 sm:mt-8 w-full lg:w-auto max-w-md lg:max-w-full overflow-x-auto">
                     {["FullTrip", "Hotel", "Restaurant", "Trip", "Travel"].map((option) => (
                         <button
                             key={option}
@@ -79,9 +87,8 @@ const FullTripExplore = () => {
                     ))}
                 </div>
 
-                {/* Search Bar */}
+                {/* Search Inputs */}
                 <div className="mt-1 bg-white rounded-lg shadow-lg p-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full max-w-4xl text-black">
-
                     {/* Destination Input */}
                     <div
                         className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 min-w-[180px] relative cursor-pointer"
@@ -94,16 +101,29 @@ const FullTripExplore = () => {
                         {showDestination && (
                             <div
                                 ref={locationPickerRef}
-                                className="absolute top-12 left-0 bg-white shadow-lg p-4 z-50 rounded-md w-60">
+                                className="absolute top-12 left-0 bg-white shadow-lg p-4 z-50 rounded-md w-60"
+                            >
                                 <p className="text-sm font-medium">Select From & To Destination</p>
                                 <div className="mt-2 space-y-2">
                                     <div className="flex justify-between">
                                         <span>From</span>
-                                        <input type="text" className="border px-2 rounded-md w-40" defaultValue={destination.fromDes} id="fromInput" />
+                                        <input
+                                            type="text"
+                                            className="border px-2 rounded-md w-40"
+                                            defaultValue={destination.fromDes}
+                                            id="fromInput"
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
                                     </div>
                                     <div className="flex justify-between">
                                         <span>To</span>
-                                        <input type="text" className="border px-2 rounded-md w-40" defaultValue={destination.toDes} id="toInput" />
+                                        <input
+                                            type="text"
+                                            className="border px-2 rounded-md w-40"
+                                            defaultValue={destination.toDes}
+                                            id="toInput"
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
                                     </div>
                                     <button
                                         className="w-full bg-blue-500 text-white py-1 mt-3 rounded-md"
@@ -123,7 +143,8 @@ const FullTripExplore = () => {
                     </div>
 
                     {/* Date Picker */}
-                    <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 min-w-[180px] relative cursor-pointer"
+                    <div
+                        className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 min-w-[180px] relative cursor-pointer"
                         onClick={() => setShowDatePicker(!showDatePicker)}
                     >
                         <FaCalendarAlt className="text-gray-500 mr-2" />
@@ -132,22 +153,42 @@ const FullTripExplore = () => {
                             {dateRange.checkOut ? dateRange.checkOut.toLocaleDateString() : "Check-out"}
                         </span>
                         <IoIosArrowDown className="text-gray-500" />
+
                         {showDatePicker && (
                             <div
                                 ref={datePickerRef}
-                                className="absolute top-12 left-0 bg-white shadow-lg p-4 z-50 rounded-md flex gap-4">
-                                <DatePicker selected={dateRange.checkIn} onChange={(date) => setDateRange({ ...dateRange, checkIn: date })} selectsStart startDate={dateRange.checkIn} endDate={dateRange.checkOut} inline />
-                                <DatePicker selected={dateRange.checkOut} onChange={(date) => setDateRange({ ...dateRange, checkOut: date })} selectsEnd startDate={dateRange.checkIn} endDate={dateRange.checkOut} inline />
+                                className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white shadow-lg z-50 rounded-md 
+                overflow-x-auto flex flex-row gap-0"
+                            >
+                                <div className="min-w-[200px] max-w-[90vw] max-h-[60vh] overflow-auto pl-2 pr-2">
+                                    <DatePicker
+                                        selected={dateRange.checkIn}
+                                        onChange={(date) => setDateRange({ ...dateRange, checkIn: date })}
+                                        selectsStart
+                                        startDate={dateRange.checkIn}
+                                        endDate={dateRange.checkOut}
+                                        inline
+                                    />
+                                </div>
+                                <div className="min-w-[250px] max-w-[90vw] max-h-[60vh] overflow-auto">
+                                    <DatePicker
+                                        selected={dateRange.checkOut}
+                                        onChange={(date) => setDateRange({ ...dateRange, checkOut: date })}
+                                        selectsEnd
+                                        startDate={dateRange.checkIn}
+                                        endDate={dateRange.checkOut}
+                                        inline
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>
 
                     {/* Persons Input */}
-                    {/* Persons Input */}
                     <div
                         className="flex items-center border border-gray-300 rounded-md px-3 py-2 flex-1 min-w-[180px] relative cursor-pointer"
                         onClick={(e) => {
-                            e.stopPropagation(); // Prevents click from bubbling to document
+                            e.stopPropagation();
                             setShowPersonDropdown(true);
                         }}
                     >
@@ -164,24 +205,26 @@ const FullTripExplore = () => {
                                     <input
                                         type="number"
                                         className="w-full border px-2 py-1 rounded-md"
-                                        min="2"
-                                        defaultValue={2}
+                                        min="1"
+                                        defaultValue={numPersons}
                                         id="PersonsInput"
                                     />
                                     <input
                                         type="number"
                                         className="w-full border px-2 py-1 rounded-md"
                                         min="500"
-                                        defaultValue={5000}
+                                        defaultValue={budget}
                                         id="BudgetInput"
                                     />
                                     <button
                                         className="w-full bg-blue-500 text-white py-1 mt-3 rounded-md"
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent the dropdown from closing too early
-                                            const personValue = document.getElementById("PersonsInput").value;
-                                            const budgetValue = document.getElementById("BudgetInput").value;
-                                            setPersons(`${personValue} Persons · ${budgetValue} Budget`);
+                                            e.stopPropagation();
+                                            const personVal = parseInt(document.getElementById("PersonsInput").value);
+                                            const budgetVal = parseInt(document.getElementById("BudgetInput").value);
+                                            setNumPersons(personVal);
+                                            setBudget(budgetVal);
+                                            setPersons(`${personVal} Persons · ${budgetVal} Budget`);
                                             setShowPersonDropdown(false);
                                         }}
                                     >
@@ -192,14 +235,43 @@ const FullTripExplore = () => {
                         )}
                     </div>
 
-
                     {/* Search Button */}
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center">
-                        <FaSearch className="mr-2" /> Search
-                    </button>
+                    <form onSubmit={handleSearch} className="w-full sm:w-auto">
+                        <button
+                            type="submit"
+                            disabled={isSearchDisabled || loading}
+                            className={`bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center w-full sm:w-auto justify-center ${(isSearchDisabled || loading) && "opacity-50 cursor-not-allowed"
+                                }`}
+                        >
+                            {loading ? (
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v8z"
+                                    ></path>
+                                </svg>
+                            ) : (
+                                <FaSearch className="mr-2" />
+                            )}
+                            {loading ? "Searching..." : "Search"}
+                        </button>
+                    </form>
                 </div>
             </div>
-
             <HotelPage />
             <RestaurantPage />
             <TripPage />
