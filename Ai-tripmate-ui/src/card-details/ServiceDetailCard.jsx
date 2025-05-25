@@ -25,9 +25,8 @@ const ServiceDetailCard = ({
   };
 
   return (
-    <section className="py-5 bg-gray-100 w-full flex justify-center">
-      <div className="bg-white shadow-lg rounded-lg flex h-[250px] flex-col md:flex-row w-full md:w-4/5 overflow-hidden border border-gray-300">
-
+    <section className="py-5 bg-gray-100 w-full flex justify-center overflow-hidden">
+      <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-full md:w-4/5 overflow-hidden border border-gray-300 md:h-[250px]">
         <div className="w-full md:w-1/3 relative">
           <img src={images} alt="Service" className="w-full h-56 md:h-80 object-cover" />
           <div className="absolute top-2 left-2 bg-blue-700 text-white text-sm font-semibold px-2 py-1 rounded-md">
@@ -53,7 +52,7 @@ const ServiceDetailCard = ({
             <div className="flex items-center bg-blue-100 px-2 py-1 rounded-md">
               <FaStar className="text-yellow-500 mr-1" />
               <span className="text-blue-800 font-semibold">{rating}</span>
-              <span className="text-gray-600 text-sm ml-1">({reviews} reviews)</span>
+              <span className="text-gray-600 text-sm ml-1">{reviews}</span>
             </div>
 
             <div className="flex gap-2 mr-4">

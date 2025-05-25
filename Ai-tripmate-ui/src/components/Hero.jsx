@@ -1,9 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+// import React from "react";
 
 const Hero = () => {
   return (
-    <section className="relative h-screen flex items-center justify-center text-white w-full">
+    <section className="relative h-screen flex items-center justify-center text-white w-[100%]">
       {/* Background Video */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
