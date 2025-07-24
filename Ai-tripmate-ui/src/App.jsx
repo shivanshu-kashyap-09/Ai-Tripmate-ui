@@ -17,6 +17,8 @@ import TravelExplore from './Explore/TravelExplore';
 import About from "./components/About";
 import Feedback from "./components/Feedback";
 import Footer from "./components/Footer";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
         </Route>
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 }
